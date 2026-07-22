@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "tsx watch src/server.ts",
+    "dev": "tsx watch --conditions=development src/server.ts",
     "build": "tsc",
     "start": "node dist/server.js",
     "db:generate": "prisma generate",
@@ -12,11 +12,11 @@
     "db:deploy": "prisma migrate deploy",
     "db:reset": "prisma migrate reset",
     "db:studio": "prisma studio",
-    "generate:courses": "tsx src/scripts/generate-courses.ts",
-    "generate:users": "tsx src/scripts/generate-users.ts",
-    "generate:surveys": "tsx src/scripts/generate-surveys.ts",
-    "generate:usage": "tsx src/scripts/generate-usage-events.ts",
-    "generate:data": "tsx src/scripts/generate-dataset.ts",
+    "generate:courses": "tsx --conditions=development src/scripts/generate-courses.ts",
+    "generate:users": "tsx --conditions=development src/scripts/generate-users.ts",
+    "generate:surveys": "tsx --conditions=development src/scripts/generate-surveys.ts",
+    "generate:usage": "tsx --conditions=development src/scripts/generate-usage-events.ts",
+    "generate:data": "tsx --conditions=development src/scripts/generate-dataset.ts",
     "test": "vitest run"
   },
   "keywords": [],
@@ -24,7 +24,10 @@
   "license": "ISC",
   "type": "module",
   "imports": {
-    "#*": "./src/*"
+    "#*": {
+      "development": "./src/*",
+      "default": "./dist/*"
+    }
   },
   "devDependencies": {
     "@types/express": "^5.0.6",
@@ -37,6 +40,7 @@
     "vitest": "^4.1.10"
   },
   "dependencies": {
+    "@google/genai": "^2.13.0",
     "@prisma/adapter-pg": "^7.9.0",
     "@prisma/client": "^7.9.0",
     "dotenv": "^17.4.2",
