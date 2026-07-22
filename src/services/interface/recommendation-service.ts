@@ -1,4 +1,4 @@
-import type { CourseRecommendation } from "../../domain/entities/recommendation.js";
+import type { CourseRecommendation } from "#models/recommendation.js";
 
 export interface RecommendationService {
   recommendForUser(

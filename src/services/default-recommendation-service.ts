@@ -1,30 +1,33 @@
-import type { Course } from "../../domain/entities/course.js";
+import type { Course } from "#models/course.js";
 
 import type {
   CourseRecommendation,
+  RecommendationReason,
   RecommendationWeights,
   SignalScoreResult,
-} from "../../domain/entities/recommendation.js";
+} from "#models/recommendation.js";
 
-import type { CourseRepository } from "../../domain/repositories/course-repository.js";
+import type { ActivitySegment } from "#models/user.js";
 
-import type { SurveyRepository } from "../../domain/repositories/survey-repository.js";
+import type { CourseRepository } from "#repositories/interfaces/course-repository.js";
 
-import type { UsageEventRepository } from "../../domain/repositories/usage-event-repository.js";
+import type { SurveyRepository } from "#repositories/interfaces/survey-repository.js";
 
-import type { UserRepository } from "../../domain/repositories/user-repository.js";
+import type { UsageEventRepository } from "#repositories/interfaces/usage-event-repository.js";
 
-import type { CourseFilterService } from "../services/course-filter-service.js";
+import type { UserRepository } from "#repositories/interfaces/user-repository.js";
 
-import type { ProfileScoringService } from "../services/profile-scoring-service.js";
+import type { CourseFilterService } from "./interface/course-filter-service.js";
 
-import type { RecommendationService } from "../services/recommendation-service.js";
+import type { ProfileScoringService } from "./interface/profile-scoring-service.js";
 
-import type { RecommendationWeightService } from "../services/recommendation-weight-service.js";
+import type { RecommendationService } from "./interface/recommendation-service.js";
 
-import type { SurveyScoringService } from "../services/survey-scoring-service.js";
+import type { RecommendationWeightService } from "./interface/recommendation-weight-service.js";
 
-import type { UsageScoringService } from "../services/usage-scoring-service.js";
+import type { SurveyScoringService } from "./interface/survey-scoring-service.js";
+
+import type { UsageScoringService } from "./interface/usage-scoring-service.js";
 
 export class DefaultRecommendationService implements RecommendationService {
   public constructor(
@@ -58,7 +61,7 @@ export class DefaultRecommendationService implements RecommendationService {
 
       this.userRepository.findLearningContext(userId),
 
-      this.surveyRepository.findByUserId(userId),
+      this.surveyRepository.findLatestByUserId(userId),
 
       this.usageRepository.findByUserId(userId),
 
@@ -104,6 +107,7 @@ export class DefaultRecommendationService implements RecommendationService {
 
         return this.buildRecommendation({
           course,
+          activitySegment: context.activity_segment,
           profileResult,
           surveyResult,
           usageResult,
@@ -116,37 +120,81 @@ export class DefaultRecommendationService implements RecommendationService {
 
   private buildRecommendation(input: {
     course: Course;
+    activitySegment: ActivitySegment;
     profileResult: SignalScoreResult;
     surveyResult: SignalScoreResult;
     usageResult: SignalScoreResult;
     weights: RecommendationWeights;
   }): CourseRecommendation {
-    const { course, profileResult, surveyResult, usageResult, weights } = input;
+    const {
+      course,
+      activitySegment,
+      profileResult,
+      surveyResult,
+      usageResult,
+      weights,
+    } = input;
+
+    const weightedContributions = {
+      profile: profileResult.score * weights.profile,
+      survey: surveyResult.score * weights.survey,
+      usage: usageResult.score * weights.usage,
+    };
 
     const finalScore =
-      profileResult.score * weights.profile +
-      surveyResult.score * weights.survey +
-      usageResult.score * weights.usage;
+      weightedContributions.profile +
+      weightedContributions.survey +
+      weightedContributions.usage;
 
     return {
       course,
 
-      final_score: this.roundScore(finalScore),
+      activity_segment: activitySegment,
+
+      signal_scores: {
+        profile: profileResult.score,
+        survey: surveyResult.score,
+        usage: usageResult.score,
+      },
 
       weights,
 
-      signals: {
+      weighted_contributions: weightedContributions,
+
+      final_score: this.roundScore(finalScore),
+
+      reasons: this.collectReasons({
         profile: profileResult,
         survey: surveyResult,
         usage: usageResult,
-      },
-
-      reasons: this.collectReasons(profileResult, surveyResult, usageResult),
+      }),
     };
   }
 
-  private collectReasons(...results: SignalScoreResult[]): string[] {
-    return [...new Set(results.flatMap((result) => result.reasons))];
+  private collectReasons(results: {
+    profile: SignalScoreResult;
+    survey: SignalScoreResult;
+    usage: SignalScoreResult;
+  }): RecommendationReason[] {
+    const reasons = (
+      Object.entries(results) as [RecommendationReason["signal"], SignalScoreResult][]
+    ).flatMap(([signal, result]) =>
+      result.reasons.map((description) => ({ signal, description })),
+    );
+
+    const seen = new Set<string>();
+
+    return reasons.filter(({ signal, description }) => {
+      const key = `${signal}:${description}`;
+
+      if (seen.has(key)) {
+        return false;
+      }
+
+      seen.add(key);
+
+      return true;
+    });
   }
 
   private roundScore(score: number): number {

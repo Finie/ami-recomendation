@@ -25,6 +25,11 @@ export interface RecommendationReason {
   description: string;
 }
 
+export interface SignalScoreResult {
+  score: number;
+  reasons: string[];
+}
+
 export interface CourseRecommendation {
   course: Course;
   activity_segment: ActivitySegment;

@@ -1,10 +1,10 @@
-import type { UserLearningContext } from "../../domain/entities/user.js";
+import type { UserLearningContext } from "#models/user.js";
 
-import type { SurveyResponse } from "../../domain/entities/survey-response.js";
+import type { SurveyResponse } from "#models/survey-response.js";
 
-import type { UsageEvent } from "../../domain/entities/usage-event.js";
+import type { UsageEvent } from "#models/usage-event.js";
 
-import type { RecommendationWeights } from "../../domain/entities/recommendation.js";
+import type { RecommendationWeights } from "#models/recommendation.js";
 
 export interface RecommendationWeightService {
   getWeights(
