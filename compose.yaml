@@ -38,6 +38,9 @@ services:
       NODE_ENV: production
       PORT: ${PORT}
       DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@database:5432/${POSTGRES_DB}?schema=public
+      GEMINI_API_KEY: ${GEMINI_API_KEY}
+      GEMINI_MODEL: ${GEMINI_MODEL}
+      AI_REVIEW_TIMEOUT_MS: ${AI_REVIEW_TIMEOUT_MS}
     ports:
       - "${PORT}:3000"
     command: ["npm", "start"]

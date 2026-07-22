@@ -171,6 +171,8 @@ export class DefaultRecommendationService implements RecommendationService {
 
       reason: this.buildUserFacingReason(course, reasons),
 
+      ai_reason: null,
+
       reasons,
     };
   }

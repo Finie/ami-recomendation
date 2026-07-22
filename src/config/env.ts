@@ -7,6 +7,15 @@ const schema = z.object({
     .enum(["development", "test", "production"])
     .default("development"),
   DATABASE_URL: z.string().min(1),
+  GEMINI_API_KEY: z.string().optional(),
+  GEMINI_MODEL: z.string().trim().min(1).default("gemini-3.6-flash"),
+  AI_REVIEW_TIMEOUT_MS: z.coerce
+    .number()
+    .int()
+    .positive()
+    .finite()
+    .catch(5000)
+    .default(5000),
 });
 
 // this file is for loading enviromental variables and validating them using zod schema

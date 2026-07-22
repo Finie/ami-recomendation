@@ -38,5 +38,6 @@ export interface CourseRecommendation {
   weighted_contributions: WeightedContributions;
   final_score: number;
   reason: string;
+  ai_reason: string | null;
   reasons: RecommendationReason[];
 }

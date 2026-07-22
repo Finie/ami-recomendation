@@ -1,6 +1,9 @@
 import type { Request, Response, NextFunction } from "express";
 
-import { recommendationService } from "../composition-root.js";
+import {
+  recommendationAIEnrichmentService,
+  recommendationService,
+} from "../composition-root.js";
 
 export async function getRecommendationsForUser(
   req: Request,
@@ -28,7 +31,15 @@ export async function getRecommendationsForUser(
       limit,
     );
 
-    res.json({ recommendations });
+    if (req.query.include_ai_review !== "true") {
+      res.json({ recommendations });
+      return;
+    }
+
+    const enrichedRecommendations =
+      await recommendationAIEnrichmentService.enrich(recommendations);
+
+    res.json({ recommendations: enrichedRecommendations });
   } catch (error) {
     next(error);
   }
