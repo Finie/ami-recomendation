@@ -37,5 +37,6 @@ export interface CourseRecommendation {
   weights: RecommendationWeights;
   weighted_contributions: WeightedContributions;
   final_score: number;
+  reason: string;
   reasons: RecommendationReason[];
 }

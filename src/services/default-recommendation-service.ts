@@ -146,6 +146,12 @@ export class DefaultRecommendationService implements RecommendationService {
       weightedContributions.survey +
       weightedContributions.usage;
 
+    const reasons = this.collectReasons({
+      profile: profileResult,
+      survey: surveyResult,
+      usage: usageResult,
+    });
+
     return {
       course,
 
@@ -163,11 +169,9 @@ export class DefaultRecommendationService implements RecommendationService {
 
       final_score: this.roundScore(finalScore),
 
-      reasons: this.collectReasons({
-        profile: profileResult,
-        survey: surveyResult,
-        usage: usageResult,
-      }),
+      reason: this.buildUserFacingReason(course, reasons),
+
+      reasons,
     };
   }
 
@@ -195,6 +199,111 @@ export class DefaultRecommendationService implements RecommendationService {
 
       return true;
     });
+  }
+
+  private buildUserFacingReason(
+    course: Course,
+    reasons: RecommendationReason[],
+  ): string {
+    const descriptions = reasons.map((reason) => reason.description);
+
+    const clauses = [
+      this.buildTopicClause(descriptions, course.topic),
+      this.buildSkillClause(descriptions),
+      this.buildUsageClause(descriptions),
+    ]
+      .filter((clause): clause is string => clause !== undefined)
+      .slice(0, 2);
+
+    if (clauses.length === 0) {
+      return `Because this course matches your current learning goals and experience level, we recommend ${course.title}.`;
+    }
+
+    return `Because ${clauses.join(" and ")}, we recommend ${course.title}.`;
+  }
+
+  private buildTopicClause(
+    descriptions: string[],
+    topic: string,
+  ): string | undefined {
+    if (descriptions.some((d) => d.startsWith("Matches your primary topic:"))) {
+      return `${topic} is one of your learning priorities`;
+    }
+
+    if (
+      descriptions.some((d) =>
+        d.startsWith("Matches a topic you selected in your survey:"),
+      )
+    ) {
+      return `you selected ${topic} as a preferred topic`;
+    }
+
+    if (
+      descriptions.some((d) => d.startsWith("Matches your secondary topic:"))
+    ) {
+      return `${topic} matches one of your areas of interest`;
+    }
+
+    return undefined;
+  }
+
+  private buildSkillClause(descriptions: string[]): string | undefined {
+    const skills = this.extractSkills(descriptions);
+
+    if (skills.length === 0) {
+      return undefined;
+    }
+
+    const humanized = skills.slice(0, 2).map((skill) => skill.replace(/_/g, " "));
+
+    const skillList =
+      humanized.length === 1
+        ? humanized[0]
+        : `${humanized[0]} and ${humanized[1]}`;
+
+    return `you want to strengthen your ${skillList} skills`;
+  }
+
+  private extractSkills(descriptions: string[]): string[] {
+    const prefixes = ["Addresses skill gaps: ", "Addresses survey skill gaps: "];
+
+    const skills: string[] = [];
+    const seen = new Set<string>();
+
+    for (const prefix of prefixes) {
+      const match = descriptions.find((d) => d.startsWith(prefix));
+
+      if (!match) {
+        continue;
+      }
+
+      const listed = match
+        .slice(prefix.length)
+        .split(",")
+        .map((skill) => skill.trim())
+        .filter((skill) => skill.length > 0);
+
+      for (const skill of listed) {
+        if (!seen.has(skill)) {
+          seen.add(skill);
+          skills.push(skill);
+        }
+      }
+    }
+
+    return skills;
+  }
+
+  private buildUsageClause(descriptions: string[]): string | undefined {
+    const prefix = "Similar topic to a course you completed: ";
+
+    const match = descriptions.find((d) => d.startsWith(prefix));
+
+    if (!match) {
+      return undefined;
+    }
+
+    return `completed ${match.slice(prefix.length)}`;
   }
 
   private roundScore(score: number): number {
