@@ -87,7 +87,7 @@ docker compose ps
 docker compose logs -f api
 
 # Try the recommendation endpoint
-curl "http://localhost:3000/api/users/2/recommendations?n=5"
+curl "http://localhost:3000/api/users/2/recommendations?limit=5"
 
 # Stop everything (the database volume is preserved)
 docker compose down
@@ -136,7 +136,7 @@ npm run db:studio # open Prisma Studio
 
 Query params:
 
-- `n` (optional, positive integer, default `10`) — max number of recommendations to return.
+- `limit` (optional, positive integer, default `10`) — max number of recommendations to return.
 - `include_ai_review` (optional, `true`/omit) — when `true`, calls Gemini to rewrite each `reason` into a friendlier `ai_reason` sentence (requires `GEMINI_API_KEY`/`GEMINI_MODEL` to be set; see [`.env`](#env)).
 
 #### Without AI review (default)
@@ -144,7 +144,7 @@ Query params:
 Omit `include_ai_review` (or set it to anything other than `true`) to get recommendations with only the deterministic `reason` field — no call to Gemini is made and `ai_reason` is always `null`.
 
 ```bash
-curl "http://localhost:3000/api/users/2/recommendations?n=1"
+curl "http://localhost:3000/api/users/2/recommendations?limit=1"
 ```
 
 ```json
@@ -180,7 +180,7 @@ curl "http://localhost:3000/api/users/2/recommendations?n=1"
 Pass `include_ai_review=true` to additionally have Gemini rewrite each `reason` into a friendlier one-sentence `ai_reason`. This requires `GEMINI_API_KEY` and `GEMINI_MODEL` to be set in `.env`; if they aren't, `ai_reason` falls back to `null` rather than the request failing.
 
 ```bash
-curl "http://localhost:3000/api/users/2/recommendations?n=1&include_ai_review=true"
+curl "http://localhost:3000/api/users/2/recommendations?limit=1&include_ai_review=true"
 ```
 
 ```json
@@ -210,6 +210,126 @@ curl "http://localhost:3000/api/users/2/recommendations?n=1&include_ai_review=tr
   ]
 }
 ```
+
+#### Sample output across activity segments
+
+The weighting and which signals are actually active depend heavily on the user's `activity_segment` and how much survey/usage data they have (see [`default-recommendation-weight-service.ts`](src/services/default-recommendation-weight-service.ts)). Below is real output captured against the seeded dataset (`npm run generate:data`) for three users chosen to represent a cold-start user, a mid-history user, and a heavy user.
+
+##### Cold-start — user 258 (`starting`, no survey, no usage events)
+
+```bash
+curl "http://localhost:3000/api/users/258/recommendations?limit=1"
+```
+
+```json
+{
+  "recommendations": [
+    {
+      "course": {
+        "course_id": 25,
+        "title": "Building Foundations in Workplace Feedback",
+        "topic": "People Management",
+        "level": "beginner",
+        "skills_taught": ["feedback", "employee_engagement", "talent_development"],
+        "duration_mins": 90,
+        "prerequisites": []
+      },
+      "activity_segment": "starting",
+      "signal_scores": { "profile": 0.84, "survey": 0, "usage": 0 },
+      "weights": { "profile": 1, "survey": 0, "usage": 0 },
+      "weighted_contributions": { "profile": 0.84, "survey": 0, "usage": 0 },
+      "final_score": 0.84,
+      "reason": "Because People Management is one of your learning priorities and you want to strengthen your feedback and employee engagement skills, we recommend Building Foundations in Workplace Feedback.",
+      "ai_reason": null,
+      "reasons": [
+        { "signal": "profile", "description": "Matches your primary topic: People Management" },
+        { "signal": "profile", "description": "Addresses skill gaps: feedback, employee_engagement, talent_development" }
+      ]
+    }
+  ]
+}
+```
+
+With no survey and no usage events, `DefaultRecommendationWeightService` redistributes both of those weights onto `profile`, so the entire ranking for this user comes from `UserLearningContext` (primary/secondary topics and likely skill gaps) alone.
+
+##### Mid-history — user 210 (`existing`, has a survey and 8 usage events)
+
+```bash
+curl "http://localhost:3000/api/users/210/recommendations?limit=1"
+```
+
+```json
+{
+  "recommendations": [
+    {
+      "course": {
+        "course_id": 2,
+        "title": "Introduction to Self-Awareness",
+        "topic": "Leadership",
+        "level": "beginner",
+        "skills_taught": ["self_awareness", "goal_setting", "team_motivation"],
+        "duration_mins": 60,
+        "prerequisites": []
+      },
+      "activity_segment": "existing",
+      "signal_scores": { "profile": 0.6, "survey": 0, "usage": 0.6666666666666666 },
+      "weights": { "profile": 0.3, "survey": 0.3, "usage": 0.4 },
+      "weighted_contributions": { "profile": 0.18, "survey": 0, "usage": 0.26666666666666666 },
+      "final_score": 0.4467,
+      "reason": "Because Leadership is one of your learning priorities and completed Leadership Fundamentals, we recommend Introduction to Self-Awareness.",
+      "ai_reason": null,
+      "reasons": [
+        { "signal": "profile", "description": "Matches your primary topic: Leadership" },
+        { "signal": "survey", "description": "Matches a topic you selected in your survey: Leadership" },
+        { "signal": "usage", "description": "Similar topic to a course you completed: Leadership Fundamentals" },
+        { "signal": "usage", "description": "Similar topic to a course you completed: Advanced Team Coaching" }
+      ]
+    }
+  ]
+}
+```
+
+All three signals are active here (`existing` segment, base weights `0.3/0.3/0.4`), and the `reasons` array shows the profile, survey, and usage evidence side by side even though `signal_scores.survey` nets to `0` for this course — see the note below.
+
+##### Heavy usage — user 810 (`heavy`, 50 usage events)
+
+```bash
+curl "http://localhost:3000/api/users/810/recommendations?limit=1"
+```
+
+```json
+{
+  "recommendations": [
+    {
+      "course": {
+        "course_id": 42,
+        "title": "Introduction to Active Listening",
+        "topic": "Communication",
+        "level": "beginner",
+        "skills_taught": ["active_listening", "business_writing", "presentation"],
+        "duration_mins": 60,
+        "prerequisites": []
+      },
+      "activity_segment": "heavy",
+      "signal_scores": { "profile": 0.6, "survey": 0.4, "usage": 1 },
+      "weights": { "profile": 0.25, "survey": 0.25, "usage": 0.5 },
+      "weighted_contributions": { "profile": 0.15, "survey": 0.1, "usage": 0.5 },
+      "final_score": 0.75,
+      "reason": "Because Communication is one of your learning priorities and completed Stakeholder Communication for Senior Leaders, we recommend Introduction to Active Listening.",
+      "ai_reason": null,
+      "reasons": [
+        { "signal": "profile", "description": "Matches your primary topic: Communication" },
+        { "signal": "survey", "description": "Matches a topic you selected in your survey: Communication" },
+        { "signal": "usage", "description": "Similar topic to a course you completed: Stakeholder Communication for Senior Leaders" }
+      ]
+    }
+  ]
+}
+```
+
+`usage` dominates the `heavy` segment's base weights (`0.25/0.25/0.5`), and this user's `usage` signal is already saturated at `1` from several completed Communication-topic courses (`NORMALIZATION_FACTOR = 3` in [`default-usage-scoring-service.ts`](src/services/default-usage-scoring-service.ts) caps it once 3+ net completions accumulate). The real response also includes several more `usage`-signal `reasons` entries — one per matching completed course — trimmed here for brevity.
+
+> **Note on the mid-history example:** you may notice `signal_scores.survey` is `0` even though a `"Matches a topic you selected in your survey"` reason is present. This is because `confidence_by_topic` in the seeded dataset stores integer Likert-style ratings (`1`–`5`, see `generate-surveys.ts`), while `DefaultSurveyScoringService` computes `confidenceScore = 1 - confidence` assuming `confidence` is already normalized to `[0, 1]`. For a rating of `3`, that yields `1 - 3 = -2`, which combined with its `0.3` weight drags the otherwise-positive topic-match score down until the final `Math.max(0, ...)` clamp floors it at `0`. This is a real scale mismatch in the current implementation, not a documentation error — it means the survey confidence sub-signal is effectively broken against this seed data whenever a topic's confidence rating is present, and is worth fixing (e.g. normalizing the generated ratings to `[0, 1]`, or rescaling in the scoring service) before relying on survey confidence in practice.
 
 ## Architecture
 
