@@ -1,45 +1,17 @@
-import { mkdir, writeFile } from "node:fs/promises";
-import { dirname, resolve } from "node:path";
-
-type CourseLevel = "beginner" | "intermediate" | "advanced";
-
-interface Course {
-  course_id: number;
-  title: string;
-  topic: string;
-  level: CourseLevel;
-  skills_taught: string[];
-  duration_mins: number;
-  prerequisites: number[];
-}
+import type { Course, CourseTopic } from "#models/course.js";
+import { prisma } from "#database/prisma-client.js";
+import { toPrismaCourseTopic } from "#database/mappers/prisma-enum-mappers.js";
+import { isMainModule } from "./run-if-main.js";
 
 interface DomainBlueprint {
-  topic: string;
+  topic: CourseTopic;
   focusAreas: string[];
   skills: string[];
 }
 
-interface CourseDataset {
-  metadata: {
-    total_courses: number;
-    total_domains: number;
-    courses_per_domain: number;
-    level_distribution: {
-      beginner: number;
-      intermediate: number;
-      advanced: number;
-    };
-  };
-  courses: Course[];
-}
-
-const COURSES_PER_DOMAIN = 20;
-
 const BEGINNER_COURSES_PER_DOMAIN = 8;
 const INTERMEDIATE_COURSES_PER_DOMAIN = 8;
 const ADVANCED_COURSES_PER_DOMAIN = 4;
-
-const OUTPUT_PATH = resolve(process.cwd(), "data", "courses.json");
 
 const domains: DomainBlueprint[] = [
   {
@@ -518,7 +490,7 @@ function generateDomainCourses(
   return courses;
 }
 
-function generateCourses(): Course[] {
+export function generateCourses(): Course[] {
   const courses: Course[] = [];
 
   for (const domain of domains) {
@@ -532,7 +504,7 @@ function generateCourses(): Course[] {
   return courses;
 }
 
-function validateCourses(courses: Course[]): void {
+export function validateCourses(courses: Course[]): void {
   const courseIds = new Set(courses.map((course) => course.course_id));
 
   const courseTitles = new Set(
@@ -563,6 +535,12 @@ function validateCourses(courses: Course[]): void {
     }
 
     for (const prerequisiteId of course.prerequisites) {
+      if (prerequisiteId === course.course_id) {
+        throw new Error(
+          `Course ${course.course_id} cannot be its own prerequisite.`,
+        );
+      }
+
       if (!courseIds.has(prerequisiteId)) {
         throw new Error(
           `Course ${course.course_id} references missing prerequisite ${prerequisiteId}.`,
@@ -575,53 +553,84 @@ function validateCourses(courses: Course[]): void {
         );
       }
     }
+
+    if (new Set(course.prerequisites).size !== course.prerequisites.length) {
+      throw new Error(`Course ${course.course_id} has duplicate prerequisites.`);
+    }
   }
 }
 
-function createDataset(courses: Course[]): CourseDataset {
-  return {
-    metadata: {
-      total_courses: courses.length,
-      total_domains: domains.length,
-      courses_per_domain: COURSES_PER_DOMAIN,
-      level_distribution: {
-        beginner: domains.length * BEGINNER_COURSES_PER_DOMAIN,
+/**
+ * Persists an already-generated, already-validated course dataset to
+ * PostgreSQL. Courses are inserted before prerequisite rows, in a single
+ * transaction, since prerequisite rows reference course_id via a foreign
+ * key.
+ */
+export async function saveCourses(courses: Course[]): Promise<void> {
+  const prerequisiteRows = courses.flatMap((course) =>
+    course.prerequisites.map((prerequisiteCourseId) => ({
+      courseId: course.course_id,
+      prerequisiteCourseId,
+    })),
+  );
 
-        intermediate: domains.length * INTERMEDIATE_COURSES_PER_DOMAIN,
-
-        advanced: domains.length * ADVANCED_COURSES_PER_DOMAIN,
-      },
-    },
-    courses,
-  };
+  try {
+    await prisma.$transaction([
+      prisma.course.createMany({
+        data: courses.map((course) => ({
+          courseId: course.course_id,
+          title: course.title,
+          topic: toPrismaCourseTopic(course.topic),
+          level: course.level,
+          skillsTaught: course.skills_taught,
+          durationMins: course.duration_mins,
+        })),
+      }),
+      ...(prerequisiteRows.length > 0
+        ? [prisma.coursePrerequisite.createMany({ data: prerequisiteRows })]
+        : []),
+    ]);
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : String(error);
+    throw new Error(`Failed to save courses: ${message}`);
+  }
 }
 
-async function main(): Promise<void> {
+export async function generateAndSaveCourses(): Promise<Course[]> {
   const courses = generateCourses();
 
   validateCourses(courses);
 
-  const dataset = createDataset(courses);
+  await saveCourses(courses);
 
-  await mkdir(dirname(OUTPUT_PATH), {
-    recursive: true,
-  });
-
-  await writeFile(OUTPUT_PATH, JSON.stringify(dataset, null, 2), "utf-8");
-
-  console.log("Course dataset generated successfully.");
-  console.log(`Domains: ${domains.length}`);
-  console.log(`Courses: ${courses.length}`);
-  console.log(`Beginner: ${dataset.metadata.level_distribution.beginner}`);
-  console.log(
-    `Intermediate: ${dataset.metadata.level_distribution.intermediate}`,
-  );
-  console.log(`Advanced: ${dataset.metadata.level_distribution.advanced}`);
-  console.log(`Output: ${OUTPUT_PATH}`);
+  return courses;
 }
 
-main().catch((error: unknown) => {
-  console.error("Failed to generate the course dataset:", error);
+async function main(): Promise<void> {
+  const courses = await generateAndSaveCourses();
 
-  process.exitCode = 1;
-});
+  const levelCounts = {
+    beginner: courses.filter((course) => course.level === "beginner").length,
+    intermediate: courses.filter((course) => course.level === "intermediate")
+      .length,
+    advanced: courses.filter((course) => course.level === "advanced").length,
+  };
+
+  console.log("Course dataset generated and inserted successfully.");
+  console.log(`Domains: ${domains.length}`);
+  console.log(`Courses: ${courses.length}`);
+  console.log(`Beginner: ${levelCounts.beginner}`);
+  console.log(`Intermediate: ${levelCounts.intermediate}`);
+  console.log(`Advanced: ${levelCounts.advanced}`);
+}
+
+if (isMainModule(import.meta.url)) {
+  main()
+    .catch((error: unknown) => {
+      console.error("Failed to generate the course dataset:", error);
+      process.exitCode = 1;
+    })
+    .finally(() => {
+      void prisma.$disconnect();
+    });
+}
