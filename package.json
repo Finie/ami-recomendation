@@ -1,0 +1,41 @@
+{
+  "name": "ami-recomendation",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "tsx watch src/index.ts",
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "db:generate": "prisma generate",
+    "db:migrate": "prisma migrate dev",
+    "db:deploy": "prisma migrate deploy",
+    "db:studio": "prisma studio",
+    "generate:courses": "tsx src/scripts/generate-courses.ts",
+    "generate:users": "tsx src/scripts/generate-users.ts",
+    "generate:surveys": "tsx src/scripts/generate-surveys.ts",
+    "generate:usage": "tsx src/scripts/generate-usage-events.ts",
+    "generate:data": "npm run generate:courses && npm run generate:users && npm run generate:surveys && npm run generate:usage"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "devDependencies": {
+    "@types/express": "^5.0.6",
+    "@types/node": "^26.1.1",
+    "@types/supertest": "^7.2.1",
+    "prisma": "^7.9.0",
+    "supertest": "^7.2.2",
+    "tsx": "^4.23.1",
+    "typescript": "^7.0.2",
+    "vitest": "^4.1.10"
+  },
+  "dependencies": {
+    "@prisma/adapter-pg": "^7.9.0",
+    "@prisma/client": "^7.9.0",
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
+    "zod": "^4.4.3"
+  }
+}

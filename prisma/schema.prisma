@@ -1,0 +1,91 @@
+generator client {
+  provider        = "prisma-client"
+  output          = "../src/generated/prisma"
+  previewFeatures = ["partialIndexes"]
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum CourseLevel {
+  beginner
+  intermediate
+  advanced
+}
+
+enum UsageEventType {
+  started
+  completed
+  dropped
+}
+
+enum Seniority {
+  entry
+  junior
+  mid
+  senior
+  manager
+  director
+  executive
+}
+
+model User {
+  userId       Int       @id @default(autoincrement()) @map("user_id")
+  role         String
+  industry     String
+  companySize  String    @map("company_size")
+  seniority    Seniority
+  statedGoal   String    @map("stated_goal")
+
+  usageEvents   UsageEvent[]
+  surveyResponse SurveyResponse?
+
+  @@map("users")
+}
+
+model Course {
+  courseId      Int         @id @default(autoincrement()) @map("course_id")
+  title         String
+  topic         String
+  level         CourseLevel
+  skillsTaught  String[]    @map("skills_taught")
+  durationMins  Int         @map("duration_mins")
+  prerequisites String[]    @default([])
+
+  usageEvents UsageEvent[]
+
+  @@map("courses")
+}
+
+model UsageEvent {
+  usageEventId Int            @id @default(autoincrement()) @map("usage_event_id")
+  userId       Int            @map("user_id")
+  courseId     Int            @map("course_id")
+  eventType    UsageEventType @map("event_type")
+  progressPct  Int            @map("progress_pct")
+  quizScore    Float?         @map("quiz_score")
+  timestamp    DateTime       @default(now())
+
+  user   User   @relation(fields: [userId], references: [userId], onDelete: Cascade)
+  course Course @relation(fields: [courseId], references: [courseId], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([courseId])
+  @@index([userId, courseId])
+  @@index([eventType])
+  @@map("usage_events")
+}
+
+model SurveyResponse {
+  surveyResponseId  Int      @id @default(autoincrement()) @map("survey_response_id")
+  userId            Int      @unique @map("user_id")
+  skillGaps         String[] @map("skill_gaps")
+  goals             String[]
+  preferredTopics   String[] @map("preferred_topics")
+  confidenceByTopic Json     @map("confidence_by_topic")
+
+  user User @relation(fields: [userId], references: [userId], onDelete: Cascade)
+
+  @@map("survey_responses")
+}

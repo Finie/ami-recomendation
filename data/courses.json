@@ -1,0 +1,2894 @@
+{
+  "metadata": {
+    "total_courses": 200,
+    "total_domains": 10,
+    "courses_per_domain": 20,
+    "level_distribution": {
+      "beginner": 80,
+      "intermediate": 80,
+      "advanced": 40
+    }
+  },
+  "courses": [
+    {
+      "course_id": 1,
+      "title": "Leadership Fundamentals",
+      "topic": "Leadership",
+      "level": "beginner",
+      "skills_taught": [
+        "leadership_basics",
+        "self_awareness",
+        "delegation"
+      ],
+      "duration_mins": 30,
+      "prerequisites": []
+    },
+    {
+      "course_id": 2,
+      "title": "Introduction to Self-Awareness",
+      "topic": "Leadership",
+      "level": "beginner",
+      "skills_taught": [
+        "self_awareness",
+        "goal_setting",
+        "team_motivation"
+      ],
+      "duration_mins": 60,
+      "prerequisites": []
+    },
+    {
+      "course_id": 3,
+      "title": "Essential Goal Setting",
+      "topic": "Leadership",
+      "level": "beginner",
+      "skills_taught": [
+        "goal_setting",
+        "delegation",
+        "decision_making"
+      ],
+      "duration_mins": 60,
+      "prerequisites": []
+    },
+    {
+      "course_id": 4,
+      "title": "Getting Started with Delegation",
+      "topic": "Leadership",
+      "level": "beginner",
+      "skills_taught": [
+        "delegation",
+        "team_motivation",
+        "accountability"
+      ],
+      "duration_mins": 60,
+      "prerequisites": []
+    },
+    {
+      "course_id": 5,
+      "title": "Building Foundations in Team Motivation",
+      "topic": "Leadership",
+      "level": "beginner",
+      "skills_taught": [
+        "team_motivation",
+        "decision_making",
+        "ethical_leadership"
+      ],
+      "duration_mins": 90,
+      "prerequisites": []
+    },
+    {
+      "course_id": 6,
+      "title": "Decision Making for the Workplace",
+      "topic": "Leadership",
+      "level": "beginner",
+      "skills_taught": [
+        "decision_making",
+        "accountability",
+        "coaching"
+      ],
+      "duration_mins": 60,
+      "prerequisites": []
+    },
+    {
+      "course_id": 7,
+      "title": "Understanding Accountability",
+      "topic": "Leadership",
+      "level": "beginner",
+      "skills_taught": [
+        "accountability",
+        "ethical_leadership",
+        "performance_management"
+      ],
+      "duration_mins": 90,
+      "prerequisites": []
+    },
+    {
+      "course_id": 8,
+      "title": "Core Principles of Ethical Leadership",
+      "topic": "Leadership",
+      "level": "beginner",
+      "skills_taught": [
+        "ethical_leadership",
+        "coaching",
+        "change_management"
+      ],
+      "duration_mins": 90,
+      "prerequisites": []
+    },
+    {
+      "course_id": 9,
+      "title": "Practical Team Coaching",
+      "topic": "Leadership",
+      "level": "intermediate",
+      "skills_taught": [
+        "coaching",
+        "performance_management",
+        "strategic_thinking"
+      ],
+      "duration_mins": 60,
+      "prerequisites": [
+        1
+      ]
+    },
+    {
+      "course_id": 10,
+      "title": "Applying Performance Leadership at Work",
+      "topic": "Leadership",
+      "level": "intermediate",
+      "skills_taught": [
+        "performance_management",
+        "change_management",
+        "leadership_basics"
+      ],
+      "duration_mins": 90,
+      "prerequisites": [
+        2
+      ]
+    },
+    {
+      "course_id": 11,
+      "title": "Leading Change for Managers",
+      "topic": "Leadership",
+      "level": "intermediate",
+      "skills_taught": [
+        "change_management",
+        "strategic_thinking",
+        "self_awareness"
+      ],
+      "duration_mins": 90,
+      "prerequisites": [
+        3
+      ]
+    },
+    {
+      "course_id": 12,
+      "title": "Improving Strategic Leadership",
+      "topic": "Leadership",
+      "level": "intermediate",
+      "skills_taught": [
+        "strategic_thinking",
+        "leadership_basics",
+        "goal_setting"
+      ],
+      "duration_mins": 120,
+      "prerequisites": [
+        4
+      ]
+    },
+    {
+      "course_id": 13,
+      "title": "Developing Stronger Leadership",
+      "topic": "Leadership",
+      "level": "intermediate",
+      "skills_taught": [
+        "leadership_basics",
+        "self_awareness",
+        "delegation"
+      ],
+      "duration_mins": 90,
+      "prerequisites": [
+        5
+      ]
+    },
+    {
+      "course_id": 14,
+      "title": "Self-Awareness in Practice",
+      "topic": "Leadership",
+      "level": "intermediate",
+      "skills_taught": [
+        "self_awareness",
+        "goal_setting",
+        "team_motivation"
+      ],
+      "duration_mins": 120,
+      "prerequisites": [
+        6
+      ]
+    },
+    {
+      "course_id": 15,
+      "title": "Managing with Goal Setting",
+      "topic": "Leadership",
+      "level": "intermediate",
+      "skills_taught": [
+        "goal_setting",
+        "delegation",
+        "decision_making"
+      ],
+      "duration_mins": 120,
+      "prerequisites": [
+        7
+      ]
+    },
+    {
+      "course_id": 16,
+      "title": "Effective Delegation",
+      "topic": "Leadership",
+      "level": "intermediate",
+      "skills_taught": [
+        "delegation",
+        "team_motivation",
+        "accountability"
+      ],
+      "duration_mins": 120,
+      "prerequisites": [
+        8
+      ]
+    },
+    {
+      "course_id": 17,
+      "title": "Advanced Team Coaching",
+      "topic": "Leadership",
+      "level": "advanced",
+      "skills_taught": [
+        "coaching",
+        "performance_management",
+        "strategic_thinking"
+      ],
+      "duration_mins": 120,
+      "prerequisites": [
+        9,
+        10
+      ]
+    },
+    {
+      "course_id": 18,
+      "title": "Strategic Performance Leadership",
+      "topic": "Leadership",
+      "level": "advanced",
+      "skills_taught": [
+        "performance_management",
+        "change_management",
+        "leadership_basics"
+      ],
+      "duration_mins": 180,
+      "prerequisites": [
+        11,
+        12
+      ]
+    },
+    {
+      "course_id": 19,
+      "title": "Mastering Leading Change",
+      "topic": "Leadership",
+      "level": "advanced",
+      "skills_taught": [
+        "change_management",
+        "strategic_thinking",
+        "self_awareness"
+      ],
+      "duration_mins": 180,
+      "prerequisites": [
+        13,
+        14
+      ]
+    },
+    {
+      "course_id": 20,
+      "title": "Strategic Leadership for Senior Leaders",
+      "topic": "Leadership",
+      "level": "advanced",
+      "skills_taught": [
+        "strategic_thinking",
+        "leadership_basics",
+        "goal_setting"
+      ],
+      "duration_mins": 180,
+      "prerequisites": [
+        15,
+        16
+      ]
+    },
+    {
+      "course_id": 21,
+      "title": "People Management Fundamentals",
+      "topic": "People Management",
+      "level": "beginner",
+      "skills_taught": [
+        "people_management",
+        "employee_onboarding",
+        "performance_reviews"
+      ],
+      "duration_mins": 30,
+      "prerequisites": []
+    },
+    {
+      "course_id": 22,
+      "title": "Introduction to Employee Onboarding",
+      "topic": "People Management",
+      "level": "beginner",
+      "skills_taught": [
+        "employee_onboarding",
+        "team_development",
+        "feedback"
+      ],
+      "duration_mins": 60,
+      "prerequisites": []
+    },
+    {
+      "course_id": 23,
+      "title": "Essential Team Development",
+      "topic": "People Management",
+      "level": "beginner",
+      "skills_taught": [
+        "team_development",
+        "performance_reviews",
+        "employee_engagement"
+      ],
+      "duration_mins": 60,
+      "prerequisites": []
+    },
+    {
+      "course_id": 24,
+      "title": "Getting Started with Performance Reviews",
+      "topic": "People Management",
+      "level": "beginner",
+      "skills_taught": [
+        "performance_reviews",
+        "feedback",
+        "conflict_resolution"
+      ],
+      "duration_mins": 60,
+      "prerequisites": []
+    },
+    {
+      "course_id": 25,
+      "title": "Building Foundations in Workplace Feedback",
+      "topic": "People Management",
+      "level": "beginner",
+      "skills_taught": [
+        "feedback",
+        "employee_engagement",
+        "talent_development"
+      ],
+      "duration_mins": 90,
+      "prerequisites": []
+    },
+    {
+      "course_id": 26,
+      "title": "Employee Engagement for the Workplace",
+      "topic": "People Management",
+      "level": "beginner",
+      "skills_taught": [
+        "employee_engagement",
+        "conflict_resolution",
+        "team_culture"
+      ],
+      "duration_mins": 60,
+      "prerequisites": []
+    },
+    {
+      "course_id": 27,
+      "title": "Understanding Conflict Resolution",
+      "topic": "People Management",
+      "level": "beginner",
+      "skills_taught": [
+        "conflict_resolution",
+        "talent_development",
+        "employee_retention"
+      ],
+      "duration_mins": 90,
+      "prerequisites": []
+    },
+    {
+      "course_id": 28,
+      "title": "Core Principles of Talent Development",
+      "topic": "People Management",
+      "level": "beginner",
+      "skills_taught": [
+        "talent_development",
+        "team_culture",
+        "workforce_planning"
+      ],
+      "duration_mins": 90,
+      "prerequisites": []
+    },
+    {
+      "course_id": 29,
+      "title": "Practical Team Culture",
+      "topic": "People Management",
+      "level": "intermediate",
+      "skills_taught": [
+        "team_culture",
+        "employee_retention",
+        "organisational_development"
+      ],
+      "duration_mins": 60,
+      "prerequisites": [
+        21
+      ]
+    },
+    {
+      "course_id": 30,
+      "title": "Applying Employee Retention at Work",
+      "topic": "People Management",
+      "level": "intermediate",
+      "skills_taught": [
+        "employee_retention",
+        "workforce_planning",
+        "people_management"
+      ],
+      "duration_mins": 90,
+      "prerequisites": [
+        22
+      ]
+    },
+    {
+      "course_id": 31,
+      "title": "Workforce Planning for Managers",
+      "topic": "People Management",
+      "level": "intermediate",
+      "skills_taught": [
+        "workforce_planning",
+        "organisational_development",
+        "employee_onboarding"
+      ],
+      "duration_mins": 90,
+      "prerequisites": [
+        23
+      ]
+    },
+    {
+      "course_id": 32,
+      "title": "Improving Organisational Development",
+      "topic": "People Management",
+      "level": "intermediate",
+      "skills_taught": [
+        "organisational_development",
+        "people_management",
+        "team_development"
+      ],
+      "duration_mins": 120,
+      "prerequisites": [
+        24
+      ]
+    },
+    {
+      "course_id": 33,
+      "title": "Developing Stronger People Management",
+      "topic": "People Management",
+      "level": "intermediate",
+      "skills_taught": [
+        "people_management",
+        "employee_onboarding",
+        "performance_reviews"
+      ],
+      "duration_mins": 90,
+      "prerequisites": [
+        25
+      ]
+    },
+    {
+      "course_id": 34,
+      "title": "Employee Onboarding in Practice",
+      "topic": "People Management",
+      "level": "intermediate",
+      "skills_taught": [
+        "employee_onboarding",
+        "team_development",
+        "feedback"
+      ],
+      "duration_mins": 120,
+      "prerequisites": [
+        26
+      ]
+    },
+    {
+      "course_id": 35,
+      "title": "Managing with Team Development",
+      "topic": "People Management",
+      "level": "intermediate",
+      "skills_taught": [
+        "team_development",
+        "performance_reviews",
+        "employee_engagement"
+      ],
+      "duration_mins": 120,
+      "prerequisites": [
+        27
+      ]
+    },
+    {
+      "course_id": 36,
+      "title": "Effective Performance Reviews",
+      "topic": "People Management",
+      "level": "intermediate",
+      "skills_taught": [
+        "performance_reviews",
+        "feedback",
+        "conflict_resolution"
+      ],
+      "duration_mins": 120,
+      "prerequisites": [
+        28
+      ]
+    },
+    {
+      "course_id": 37,
+      "title": "Advanced Team Culture",
+      "topic": "People Management",
+      "level": "advanced",
+      "skills_taught": [
+        "team_culture",
+        "employee_retention",
+        "organisational_development"
+      ],
+      "duration_mins": 120,
+      "prerequisites": [
+        29,
+        30
+      ]
+    },
+    {
+      "course_id": 38,
+      "title": "Strategic Employee Retention",
+      "topic": "People Management",
+      "level": "advanced",
+      "skills_taught": [
+        "employee_retention",
+        "workforce_planning",
+        "people_management"
+      ],
+      "duration_mins": 180,
+      "prerequisites": [
+        31,
+        32
+      ]
+    },
+    {
+      "course_id": 39,
+      "title": "Mastering Workforce Planning",
+      "topic": "People Management",
+      "level": "advanced",
+      "skills_taught": [
+        "workforce_planning",
+        "organisational_development",
+        "employee_onboarding"
+      ],
+      "duration_mins": 180,
+      "prerequisites": [
+        33,
+        34
+      ]
+    },
+    {
+      "course_id": 40,
+      "title": "Organisational Development for Senior Leaders",
+      "topic": "People Management",
+      "level": "advanced",
+      "skills_taught": [
+        "organisational_development",
+        "people_management",
+        "team_development"
+      ],
+      "duration_mins": 180,
+      "prerequisites": [
+        35,
+        36
+      ]
+    },
+    {
+      "course_id": 41,
+      "title": "Business Communication Fundamentals",
+      "topic": "Communication",
+      "level": "beginner",
+      "skills_taught": [
+        "business_communication",
+        "active_listening",
+        "workplace_conversations"
+      ],
+      "duration_mins": 30,
+      "prerequisites": []
+    },
+    {
+      "course_id": 42,
+      "title": "Introduction to Active Listening",
+      "topic": "Communication",
+      "level": "beginner",
+      "skills_taught": [
+        "active_listening",
+        "business_writing",
+        "presentation"
+      ],
+      "duration_mins": 60,
+      "prerequisites": []
+    },
+    {
+      "course_id": 43,
+      "title": "Essential Business Writing",
+      "topic": "Communication",
+      "level": "beginner",
+      "skills_taught": [
+        "business_writing",
+        "workplace_conversations",
+        "feedback"
+      ],
+      "duration_mins": 60,
+      "prerequisites": []
+    },
+    {
+      "course_id": 44,
+      "title": "Getting Started with Workplace Conversations",
+      "topic": "Communication",
+      "level": "beginner",
+      "skills_taught": [
+        "workplace_conversations",
+        "presentation",
+        "meeting_facilitation"
+      ],
+      "duration_mins": 60,
+      "prerequisites": []
+    },
+    {
+      "course_id": 45,
+      "title": "Building Foundations in Presentation Skills",
+      "topic": "Communication",
+      "level": "beginner",
+      "skills_taught": [
+        "presentation",
+        "feedback",
+        "storytelling"
+      ],
+      "duration_mins": 90,
+      "prerequisites": []
+    },
+    {
+      "course_id": 46,
+      "title": "Giving Feedback for the Workplace",
+      "topic": "Communication",
+      "level": "beginner",
+      "skills_taught": [
+        "feedback",
+        "meeting_facilitation",
+        "persuasion"
+      ],
+      "duration_mins": 60,
+      "prerequisites": []
+    },
+    {
+      "course_id": 47,
+      "title": "Understanding Meeting Facilitation",
+      "topic": "Communication",
+      "level": "beginner",
+      "skills_taught": [
+        "meeting_facilitation",
+        "storytelling",
+        "difficult_conversations"
+      ],
+      "duration_mins": 90,
+      "prerequisites": []
+    },
+    {
+      "course_id": 48,
+      "title": "Core Principles of Business Storytelling",
+      "topic": "Communication",
+      "level": "beginner",
+      "skills_taught": [
+        "storytelling",
+        "persuasion",
+        "executive_communication"
+      ],
+      "duration_mins": 90,
+      "prerequisites": []
+    },
+    {
+      "course_id": 49,
+      "title": "Practical Persuasive Communication",
+      "topic": "Communication",
+      "level": "intermediate",
+      "skills_taught": [
+        "persuasion",
+        "difficult_conversations",
+        "stakeholder_communication"
+      ],
+      "duration_mins": 60,
+      "prerequisites": [
+        41
+      ]
+    },
+    {
+      "course_id": 50,
+      "title": "Applying Difficult Conversations at Work",
+      "topic": "Communication",
+      "level": "intermediate",
+      "skills_taught": [
+        "difficult_conversations",
+        "executive_communication",
+        "business_communication"
+      ],
+      "duration_mins": 90,
+      "prerequisites": [
+        42
+      ]
+    },
+    {
+      "course_id": 51,
+      "title": "Executive Communication for Managers",
+      "topic": "Communication",
+      "level": "intermediate",
+      "skills_taught": [
+        "executive_communication",
+        "stakeholder_communication",
+        "active_listening"
+      ],
+      "duration_mins": 90,
+      "prerequisites": [
+        43
+      ]
+    },
+    {
+      "course_id": 52,
+      "title": "Improving Stakeholder Communication",
+      "topic": "Communication",
+      "level": "intermediate",
+      "skills_taught": [
+        "stakeholder_communication",
+        "business_communication",
+        "business_writing"
+      ],
+      "duration_mins": 120,
+      "prerequisites": [
+        44
+      ]
+    },
+    {
+      "course_id": 53,
+      "title": "Developing Stronger Business Communication",
+      "topic": "Communication",
+      "level": "intermediate",
+      "skills_taught": [
+        "business_communication",
+        "active_listening",
+        "workplace_conversations"
+      ],
+      "duration_mins": 90,
+      "prerequisites": [
+        45
+      ]
+    },
+    {
+      "course_id": 54,
+      "title": "Active Listening in Practice",
+      "topic": "Communication",
+      "level": "intermediate",
+      "skills_taught": [
+        "active_listening",
+        "business_writing",
+        "presentation"
+      ],
+      "duration_mins": 120,
+      "prerequisites": [
+        46
+      ]
+    },
+    {
+      "course_id": 55,
+      "title": "Managing with Business Writing",
+      "topic": "Communication",
+      "level": "intermediate",
+      "skills_taught": [
+        "business_writing",
+        "workplace_conversations",
+        "feedback"
+      ],
+      "duration_mins": 120,
+      "prerequisites": [
+        47
+      ]
+    },
+    {
+      "course_id": 56,
+      "title": "Effective Workplace Conversations",
+      "topic": "Communication",
+      "level": "intermediate",
+      "skills_taught": [
+        "workplace_conversations",
+        "presentation",
+        "meeting_facilitation"
+      ],
+      "duration_mins": 120,
+      "prerequisites": [
+        48
+      ]
+    },
+    {
+      "course_id": 57,
+      "title": "Advanced Persuasive Communication",
+      "topic": "Communication",
+      "level": "advanced",
+      "skills_taught": [
+        "persuasion",
+        "difficult_conversations",
+        "stakeholder_communication"
+      ],
+      "duration_mins": 120,
+      "prerequisites": [
+        49,
+        50
+      ]
+    },
+    {
+      "course_id": 58,
+      "title": "Strategic Difficult Conversations",
+      "topic": "Communication",
+      "level": "advanced",
+      "skills_taught": [
+        "difficult_conversations",
+        "executive_communication",
+        "business_communication"
+      ],
+      "duration_mins": 180,
+      "prerequisites": [
+        51,
+        52
+      ]
+    },
+    {
+      "course_id": 59,
+      "title": "Mastering Executive Communication",
+      "topic": "Communication",
+      "level": "advanced",
+      "skills_taught": [
+        "executive_communication",
+        "stakeholder_communication",
+        "active_listening"
+      ],
+      "duration_mins": 180,
+      "prerequisites": [
+        53,
+        54
+      ]
+    },
+    {
+      "course_id": 60,
+      "title": "Stakeholder Communication for Senior Leaders",
+      "topic": "Communication",
+      "level": "advanced",
+      "skills_taught": [
+        "stakeholder_communication",
+        "business_communication",
+        "business_writing"
+      ],
+      "duration_mins": 180,
+      "prerequisites": [
+        55,
+        56
+      ]
+    },
+    {
+      "course_id": 61,
+      "title": "Sales Fundamentals",
+      "topic": "Sales",
+      "level": "beginner",
+      "skills_taught": [
+        "sales_process",
+        "customer_discovery",
+        "relationship_building"
+      ],
+      "duration_mins": 30,
+      "prerequisites": []
+    },
+    {
+      "course_id": 62,
+      "title": "Introduction to Customer Discovery",
+      "topic": "Sales",
+      "level": "beginner",
+      "skills_taught": [
+        "customer_discovery",
+        "prospecting",
+        "objection_handling"
+      ],
+      "duration_mins": 60,
+      "prerequisites": []
+    },
+    {
+      "course_id": 63,
+      "title": "Essential Prospecting",
+      "topic": "Sales",
+      "level": "beginner",
+      "skills_taught": [
+        "prospecting",
+        "relationship_building",
+        "sales_presentations"
+      ],
+      "duration_mins": 60,
+      "prerequisites": []
+    },
+    {
+      "course_id": 64,
+      "title": "Getting Started with Relationship Building",
+      "topic": "Sales",
+      "level": "beginner",
+      "skills_taught": [
+        "relationship_building",
+        "objection_handling",
+        "closing"
+      ],
+      "duration_mins": 60,
+      "prerequisites": []
+    },
+    {
+      "course_id": 65,
+      "title": "Building Foundations in Objection Handling",
+      "topic": "Sales",
+      "level": "beginner",
+      "skills_taught": [
+        "objection_handling",
+        "sales_presentations",
+        "pipeline_management"
+      ],
+      "duration_mins": 90,
+      "prerequisites": []
+    },
+    {
+      "course_id": 66,
+      "title": "Sales Presentations for the Workplace",
+      "topic": "Sales",
+      "level": "beginner",
+      "skills_taught": [
+        "sales_presentations",
+        "closing",
+        "consultative_selling"
+      ],
+      "duration_mins": 60,
+      "prerequisites": []
+    },
+    {
+      "course_id": 67,
+      "title": "Understanding Closing Deals",
+      "topic": "Sales",
+      "level": "beginner",
+      "skills_taught": [
+        "closing",
+        "pipeline_management",
+        "sales_negotiation"
+      ],
+      "duration_mins": 90,
+      "prerequisites": []
+    },
+    {
+      "course_id": 68,
+      "title": "Core Principles of Pipeline Management",
+      "topic": "Sales",
+      "level": "beginner",
+      "skills_taught": [
+        "pipeline_management",
+        "consultative_selling",
+        "account_management"
+      ],
+      "duration_mins": 90,
+      "prerequisites": []
+    },
+    {
+      "course_id": 69,
+      "title": "Practical Consultative Selling",
+      "topic": "Sales",
+      "level": "intermediate",
+      "skills_taught": [
+        "consultative_selling",
+        "sales_negotiation",
+        "revenue_growth"
+      ],
+      "duration_mins": 60,
+      "prerequisites": [
+        61
+      ]
+    },
+    {
+      "course_id": 70,
+      "title": "Applying Sales Negotiation at Work",
+      "topic": "Sales",
+      "level": "intermediate",
+      "skills_taught": [
+        "sales_negotiation",
+        "account_management",
+        "sales_process"
+      ],
+      "duration_mins": 90,
+      "prerequisites": [
+        62
+      ]
+    },
+    {
+      "course_id": 71,
+      "title": "Account Management for Managers",
+      "topic": "Sales",
+      "level": "intermediate",
+      "skills_taught": [
+        "account_management",
+        "revenue_growth",
+        "customer_discovery"
+      ],
+      "duration_mins": 90,
+      "prerequisites": [
+        63
+      ]
+    },
+    {
+      "course_id": 72,
+      "title": "Improving Revenue Growth",
+      "topic": "Sales",
+      "level": "intermediate",
+      "skills_taught": [
+        "revenue_growth",
+        "sales_process",
+        "prospecting"
+      ],
+      "duration_mins": 120,
+      "prerequisites": [
+        64
+      ]
+    },
+    {
+      "course_id": 73,
+      "title": "Developing Stronger Sales",
+      "topic": "Sales",
+      "level": "intermediate",
+      "skills_taught": [
+        "sales_process",
+        "customer_discovery",
+        "relationship_building"
+      ],
+      "duration_mins": 90,
+      "prerequisites": [
+        65
+      ]
+    },
+    {
+      "course_id": 74,
+      "title": "Customer Discovery in Practice",
+      "topic": "Sales",
+      "level": "intermediate",
+      "skills_taught": [
+        "customer_discovery",
+        "prospecting",
+        "objection_handling"
+      ],
+      "duration_mins": 120,
+      "prerequisites": [
+        66
+      ]
+    },
+    {
+      "course_id": 75,
+      "title": "Managing with Prospecting",
+      "topic": "Sales",
+      "level": "intermediate",
+      "skills_taught": [
+        "prospecting",
+        "relationship_building",
+        "sales_presentations"
+      ],
+      "duration_mins": 120,
+      "prerequisites": [
+        67
+      ]
+    },
+    {
+      "course_id": 76,
+      "title": "Effective Relationship Building",
+      "topic": "Sales",
+      "level": "intermediate",
+      "skills_taught": [
+        "relationship_building",
+        "objection_handling",
+        "closing"
+      ],
+      "duration_mins": 120,
+      "prerequisites": [
+        68
+      ]
+    },
+    {
+      "course_id": 77,
+      "title": "Advanced Consultative Selling",
+      "topic": "Sales",
+      "level": "advanced",
+      "skills_taught": [
+        "consultative_selling",
+        "sales_negotiation",
+        "revenue_growth"
+      ],
+      "duration_mins": 120,
+      "prerequisites": [
+        69,
+        70
+      ]
+    },
+    {
+      "course_id": 78,
+      "title": "Strategic Sales Negotiation",
+      "topic": "Sales",
+      "level": "advanced",
+      "skills_taught": [
+        "sales_negotiation",
+        "account_management",
+        "sales_process"
+      ],
+      "duration_mins": 180,
+      "prerequisites": [
+        71,
+        72
+      ]
+    },
+    {
+      "course_id": 79,
+      "title": "Mastering Account Management",
+      "topic": "Sales",
+      "level": "advanced",
+      "skills_taught": [
+        "account_management",
+        "revenue_growth",
+        "customer_discovery"
+      ],
+      "duration_mins": 180,
+      "prerequisites": [
+        73,
+        74
+      ]
+    },
+    {
+      "course_id": 80,
+      "title": "Revenue Growth for Senior Leaders",
+      "topic": "Sales",
+      "level": "advanced",
+      "skills_taught": [
+        "revenue_growth",
+        "sales_process",
+        "prospecting"
+      ],
+      "duration_mins": 180,
+      "prerequisites": [
+        75,
+        76
+      ]
+    },
+    {
+      "course_id": 81,
+      "title": "Customer Service Fundamentals",
+      "topic": "Customer Service",
+      "level": "beginner",
+      "skills_taught": [
+        "customer_service",
+        "customer_needs",
+        "customer_empathy"
+      ],
+      "duration_mins": 30,
+      "prerequisites": []
+    },
+    {
+      "course_id": 82,
+      "title": "Introduction to Customer Needs",
+      "topic": "Customer Service",
+      "level": "beginner",
+      "skills_taught": [
+        "customer_needs",
+        "service_communication",
+        "complaint_handling"
+      ],
+      "duration_mins": 60,
+      "prerequisites": []
+    },
+    {
+      "course_id": 83,
+      "title": "Essential Service Communication",
+      "topic": "Customer Service",
+      "level": "beginner",
+      "skills_taught": [
+        "service_communication",
+        "customer_empathy",
+        "service_recovery"
+      ],
+      "duration_mins": 60,
+      "prerequisites": []
+    },
+    {
+      "course_id": 84,
+      "title": "Getting Started with Customer Empathy",
+      "topic": "Customer Service",
+      "level": "beginner",
+      "skills_taught": [
+        "customer_empathy",
+        "complaint_handling",
+        "customer_experience"
+      ],
+      "duration_mins": 60,
+      "prerequisites": []
+    },
+    {
+      "course_id": 85,
+      "title": "Building Foundations in Complaint Handling",
+      "topic": "Customer Service",
+      "level": "beginner",
+      "skills_taught": [
+        "complaint_handling",
+        "service_recovery",
+        "customer_retention"
+      ],
+      "duration_mins": 90,
+      "prerequisites": []
+    },
+    {
+      "course_id": 86,
+      "title": "Service Recovery for the Workplace",
+      "topic": "Customer Service",
+      "level": "beginner",
+      "skills_taught": [
+        "service_recovery",
+        "customer_experience",
+        "support_quality"
+      ],
+      "duration_mins": 60,
+      "prerequisites": []
+    },
+    {
+      "course_id": 87,
+      "title": "Understanding Customer Experience",
+      "topic": "Customer Service",
+      "level": "beginner",
+      "skills_taught": [
+        "customer_experience",
+        "customer_retention",
+        "service_standards"
+      ],
+      "duration_mins": 90,
+      "prerequisites": []
+    },
+    {
+      "course_id": 88,
+      "title": "Core Principles of Customer Retention",
+      "topic": "Customer Service",
+      "level": "beginner",
+      "skills_taught": [
+        "customer_retention",
+        "support_quality",
+        "customer_success"
+      ],
+      "duration_mins": 90,
+      "prerequisites": []
+    },
+    {
+      "course_id": 89,
+      "title": "Practical Support Quality",
+      "topic": "Customer Service",
+      "level": "intermediate",
+      "skills_taught": [
+        "support_quality",
+        "service_standards",
+        "customer_experience_strategy"
+      ],
+      "duration_mins": 60,
+      "prerequisites": [
+        81
+      ]
+    },
+    {
+      "course_id": 90,
+      "title": "Applying Service Standards at Work",
+      "topic": "Customer Service",
+      "level": "intermediate",
+      "skills_taught": [
+        "service_standards",
+        "customer_success",
+        "customer_service"
+      ],
+      "duration_mins": 90,
+      "prerequisites": [
+        82
+      ]
+    },
+    {
+      "course_id": 91,
+      "title": "Customer Success for Managers",
+      "topic": "Customer Service",
+      "level": "intermediate",
+      "skills_taught": [
+        "customer_success",
+        "customer_experience_strategy",
+        "customer_needs"
+      ],
+      "duration_mins": 90,
+      "prerequisites": [
+        83
+      ]
+    },
+    {
+      "course_id": 92,
+      "title": "Improving Customer Experience Strategy",
+      "topic": "Customer Service",
+      "level": "intermediate",
+      "skills_taught": [
+        "customer_experience_strategy",
+        "customer_service",
+        "service_communication"
+      ],
+      "duration_mins": 120,
+      "prerequisites": [
+        84
+      ]
+    },
+    {
+      "course_id": 93,
+      "title": "Developing Stronger Customer Service",
+      "topic": "Customer Service",
+      "level": "intermediate",
+      "skills_taught": [
+        "customer_service",
+        "customer_needs",
+        "customer_empathy"
+      ],
+      "duration_mins": 90,
+      "prerequisites": [
+        85
+      ]
+    },
+    {
+      "course_id": 94,
+      "title": "Customer Needs in Practice",
+      "topic": "Customer Service",
+      "level": "intermediate",
+      "skills_taught": [
+        "customer_needs",
+        "service_communication",
+        "complaint_handling"
+      ],
+      "duration_mins": 120,
+      "prerequisites": [
+        86
+      ]
+    },
+    {
+      "course_id": 95,
+      "title": "Managing with Service Communication",
+      "topic": "Customer Service",
+      "level": "intermediate",
+      "skills_taught": [
+        "service_communication",
+        "customer_empathy",
+        "service_recovery"
+      ],
+      "duration_mins": 120,
+      "prerequisites": [
+        87
+      ]
+    },
+    {
+      "course_id": 96,
+      "title": "Effective Customer Empathy",
+      "topic": "Customer Service",
+      "level": "intermediate",
+      "skills_taught": [
+        "customer_empathy",
+        "complaint_handling",
+        "customer_experience"
+      ],
+      "duration_mins": 120,
+      "prerequisites": [
+        88
+      ]
+    },
+    {
+      "course_id": 97,
+      "title": "Advanced Support Quality",
+      "topic": "Customer Service",
+      "level": "advanced",
+      "skills_taught": [
+        "support_quality",
+        "service_standards",
+        "customer_experience_strategy"
+      ],
+      "duration_mins": 120,
+      "prerequisites": [
+        89,
+        90
+      ]
+    },
+    {
+      "course_id": 98,
+      "title": "Strategic Service Standards",
+      "topic": "Customer Service",
+      "level": "advanced",
+      "skills_taught": [
+        "service_standards",
+        "customer_success",
+        "customer_service"
+      ],
+      "duration_mins": 180,
+      "prerequisites": [
+        91,
+        92
+      ]
+    },
+    {
+      "course_id": 99,
+      "title": "Mastering Customer Success",
+      "topic": "Customer Service",
+      "level": "advanced",
+      "skills_taught": [
+        "customer_success",
+        "customer_experience_strategy",
+        "customer_needs"
+      ],
+      "duration_mins": 180,
+      "prerequisites": [
+        93,
+        94
+      ]
+    },
+    {
+      "course_id": 100,
+      "title": "Customer Experience Strategy for Senior Leaders",
+      "topic": "Customer Service",
+      "level": "advanced",
+      "skills_taught": [
+        "customer_experience_strategy",
+        "customer_service",
+        "service_communication"
+      ],
+      "duration_mins": 180,
+      "prerequisites": [
+        95,
+        96
+      ]
+    },
+    {
+      "course_id": 101,
+      "title": "Financial Literacy Fundamentals",
+      "topic": "Finance",
+      "level": "beginner",
+      "skills_taught": [
+        "financial_literacy",
+        "financial_statements",
+        "budgeting"
+      ],
+      "duration_mins": 30,
+      "prerequisites": []
+    },
+    {
+      "course_id": 102,
+      "title": "Introduction to Financial Statements",
+      "topic": "Finance",
+      "level": "beginner",
+      "skills_taught": [
+        "financial_statements",
+        "business_metrics",
+        "cost_management"
+      ],
+      "duration_mins": 60,
+      "prerequisites": []
+    },
+    {
+      "course_id": 103,
+      "title": "Essential Business Metrics",
+      "topic": "Finance",
+      "level": "beginner",
+      "skills_taught": [
+        "business_metrics",
+        "budgeting",
+        "cash_flow"
+      ],
+      "duration_mins": 60,
+      "prerequisites": []
+    },
+    {
+      "course_id": 104,
+      "title": "Getting Started with Budgeting",
+      "topic": "Finance",
+      "level": "beginner",
+      "skills_taught": [
+        "budgeting",
+        "cost_management",
+        "financial_planning"
+      ],
+      "duration_mins": 60,
+      "prerequisites": []
+    },
+    {
+      "course_id": 105,
+      "title": "Building Foundations in Cost Management",
+      "topic": "Finance",
+      "level": "beginner",
+      "skills_taught": [
+        "cost_management",
+        "cash_flow",
+        "financial_forecasting"
+      ],
+      "duration_mins": 90,
+      "prerequisites": []
+    },
+    {
+      "course_id": 106,
+      "title": "Cash Flow for the Workplace",
+      "topic": "Finance",
+      "level": "beginner",
+      "skills_taught": [
+        "cash_flow",
+        "financial_planning",
+        "profitability_analysis"
+      ],
+      "duration_mins": 60,
+      "prerequisites": []
+    },
+    {
+      "course_id": 107,
+      "title": "Understanding Financial Planning",
+      "topic": "Finance",
+      "level": "beginner",
+      "skills_taught": [
+        "financial_planning",
+        "financial_forecasting",
+        "pricing"
+      ],
+      "duration_mins": 90,
+      "prerequisites": []
+    },
+    {
+      "course_id": 108,
+      "title": "Core Principles of Financial Forecasting",
+      "topic": "Finance",
+      "level": "beginner",
+      "skills_taught": [
+        "financial_forecasting",
+        "profitability_analysis",
+        "investment_analysis"
+      ],
+      "duration_mins": 90,
+      "prerequisites": []
+    },
+    {
+      "course_id": 109,
+      "title": "Practical Profitability Analysis",
+      "topic": "Finance",
+      "level": "intermediate",
+      "skills_taught": [
+        "profitability_analysis",
+        "pricing",
+        "financial_strategy"
+      ],
+      "duration_mins": 60,
+      "prerequisites": [
+        101
+      ]
+    },
+    {
+      "course_id": 110,
+      "title": "Applying Pricing Decisions at Work",
+      "topic": "Finance",
+      "level": "intermediate",
+      "skills_taught": [
+        "pricing",
+        "investment_analysis",
+        "financial_literacy"
+      ],
+      "duration_mins": 90,
+      "prerequisites": [
+        102
+      ]
+    },
+    {
+      "course_id": 111,
+      "title": "Investment Analysis for Managers",
+      "topic": "Finance",
+      "level": "intermediate",
+      "skills_taught": [
+        "investment_analysis",
+        "financial_strategy",
+        "financial_statements"
+      ],
+      "duration_mins": 90,
+      "prerequisites": [
+        103
+      ]
+    },
+    {
+      "course_id": 112,
+      "title": "Improving Financial Strategy",
+      "topic": "Finance",
+      "level": "intermediate",
+      "skills_taught": [
+        "financial_strategy",
+        "financial_literacy",
+        "business_metrics"
+      ],
+      "duration_mins": 120,
+      "prerequisites": [
+        104
+      ]
+    },
+    {
+      "course_id": 113,
+      "title": "Developing Stronger Financial Literacy",
+      "topic": "Finance",
+      "level": "intermediate",
+      "skills_taught": [
+        "financial_literacy",
+        "financial_statements",
+        "budgeting"
+      ],
+      "duration_mins": 90,
+      "prerequisites": [
+        105
+      ]
+    },
+    {
+      "course_id": 114,
+      "title": "Financial Statements in Practice",
+      "topic": "Finance",
+      "level": "intermediate",
+      "skills_taught": [
+        "financial_statements",
+        "business_metrics",
+        "cost_management"
+      ],
+      "duration_mins": 120,
+      "prerequisites": [
+        106
+      ]
+    },
+    {
+      "course_id": 115,
+      "title": "Managing with Business Metrics",
+      "topic": "Finance",
+      "level": "intermediate",
+      "skills_taught": [
+        "business_metrics",
+        "budgeting",
+        "cash_flow"
+      ],
+      "duration_mins": 120,
+      "prerequisites": [
+        107
+      ]
+    },
+    {
+      "course_id": 116,
+      "title": "Effective Budgeting",
+      "topic": "Finance",
+      "level": "intermediate",
+      "skills_taught": [
+        "budgeting",
+        "cost_management",
+        "financial_planning"
+      ],
+      "duration_mins": 120,
+      "prerequisites": [
+        108
+      ]
+    },
+    {
+      "course_id": 117,
+      "title": "Advanced Profitability Analysis",
+      "topic": "Finance",
+      "level": "advanced",
+      "skills_taught": [
+        "profitability_analysis",
+        "pricing",
+        "financial_strategy"
+      ],
+      "duration_mins": 120,
+      "prerequisites": [
+        109,
+        110
+      ]
+    },
+    {
+      "course_id": 118,
+      "title": "Strategic Pricing Decisions",
+      "topic": "Finance",
+      "level": "advanced",
+      "skills_taught": [
+        "pricing",
+        "investment_analysis",
+        "financial_literacy"
+      ],
+      "duration_mins": 180,
+      "prerequisites": [
+        111,
+        112
+      ]
+    },
+    {
+      "course_id": 119,
+      "title": "Mastering Investment Analysis",
+      "topic": "Finance",
+      "level": "advanced",
+      "skills_taught": [
+        "investment_analysis",
+        "financial_strategy",
+        "financial_statements"
+      ],
+      "duration_mins": 180,
+      "prerequisites": [
+        113,
+        114
+      ]
+    },
+    {
+      "course_id": 120,
+      "title": "Financial Strategy for Senior Leaders",
+      "topic": "Finance",
+      "level": "advanced",
+      "skills_taught": [
+        "financial_strategy",
+        "financial_literacy",
+        "business_metrics"
+      ],
+      "duration_mins": 180,
+      "prerequisites": [
+        115,
+        116
+      ]
+    },
+    {
+      "course_id": 121,
+      "title": "Business Strategy Fundamentals",
+      "topic": "Strategy",
+      "level": "beginner",
+      "skills_taught": [
+        "business_strategy",
+        "strategic_thinking",
+        "competitive_advantage"
+      ],
+      "duration_mins": 30,
+      "prerequisites": []
+    },
+    {
+      "course_id": 122,
+      "title": "Introduction to Strategic Thinking",
+      "topic": "Strategy",
+      "level": "beginner",
+      "skills_taught": [
+        "strategic_thinking",
+        "market_analysis",
+        "goal_alignment"
+      ],
+      "duration_mins": 60,
+      "prerequisites": []
+    },
+    {
+      "course_id": 123,
+      "title": "Essential Market Analysis",
+      "topic": "Strategy",
+      "level": "beginner",
+      "skills_taught": [
+        "market_analysis",
+        "competitive_advantage",
+        "strategic_planning"
+      ],
+      "duration_mins": 60,
+      "prerequisites": []
+    },
+    {
+      "course_id": 124,
+      "title": "Getting Started with Competitive Advantage",
+      "topic": "Strategy",
+      "level": "beginner",
+      "skills_taught": [
+        "competitive_advantage",
+        "goal_alignment",
+        "business_models"
+      ],
+      "duration_mins": 60,
+      "prerequisites": []
+    },
+    {
+      "course_id": 125,
+      "title": "Building Foundations in Goal Alignment",
+      "topic": "Strategy",
+      "level": "beginner",
+      "skills_taught": [
+        "goal_alignment",
+        "strategic_planning",
+        "growth_strategy"
+      ],
+      "duration_mins": 90,
+      "prerequisites": []
+    },
+    {
+      "course_id": 126,
+      "title": "Strategic Planning for the Workplace",
+      "topic": "Strategy",
+      "level": "beginner",
+      "skills_taught": [
+        "strategic_planning",
+        "business_models",
+        "scenario_planning"
+      ],
+      "duration_mins": 60,
+      "prerequisites": []
+    },
+    {
+      "course_id": 127,
+      "title": "Understanding Business Models",
+      "topic": "Strategy",
+      "level": "beginner",
+      "skills_taught": [
+        "business_models",
+        "growth_strategy",
+        "strategic_execution"
+      ],
+      "duration_mins": 90,
+      "prerequisites": []
+    },
+    {
+      "course_id": 128,
+      "title": "Core Principles of Growth Strategy",
+      "topic": "Strategy",
+      "level": "beginner",
+      "skills_taught": [
+        "growth_strategy",
+        "scenario_planning",
+        "portfolio_strategy"
+      ],
+      "duration_mins": 90,
+      "prerequisites": []
+    },
+    {
+      "course_id": 129,
+      "title": "Practical Scenario Planning",
+      "topic": "Strategy",
+      "level": "intermediate",
+      "skills_taught": [
+        "scenario_planning",
+        "strategic_execution",
+        "corporate_strategy"
+      ],
+      "duration_mins": 60,
+      "prerequisites": [
+        121
+      ]
+    },
+    {
+      "course_id": 130,
+      "title": "Applying Strategic Execution at Work",
+      "topic": "Strategy",
+      "level": "intermediate",
+      "skills_taught": [
+        "strategic_execution",
+        "portfolio_strategy",
+        "business_strategy"
+      ],
+      "duration_mins": 90,
+      "prerequisites": [
+        122
+      ]
+    },
+    {
+      "course_id": 131,
+      "title": "Portfolio Strategy for Managers",
+      "topic": "Strategy",
+      "level": "intermediate",
+      "skills_taught": [
+        "portfolio_strategy",
+        "corporate_strategy",
+        "strategic_thinking"
+      ],
+      "duration_mins": 90,
+      "prerequisites": [
+        123
+      ]
+    },
+    {
+      "course_id": 132,
+      "title": "Improving Corporate Strategy",
+      "topic": "Strategy",
+      "level": "intermediate",
+      "skills_taught": [
+        "corporate_strategy",
+        "business_strategy",
+        "market_analysis"
+      ],
+      "duration_mins": 120,
+      "prerequisites": [
+        124
+      ]
+    },
+    {
+      "course_id": 133,
+      "title": "Developing Stronger Business Strategy",
+      "topic": "Strategy",
+      "level": "intermediate",
+      "skills_taught": [
+        "business_strategy",
+        "strategic_thinking",
+        "competitive_advantage"
+      ],
+      "duration_mins": 90,
+      "prerequisites": [
+        125
+      ]
+    },
+    {
+      "course_id": 134,
+      "title": "Strategic Thinking in Practice",
+      "topic": "Strategy",
+      "level": "intermediate",
+      "skills_taught": [
+        "strategic_thinking",
+        "market_analysis",
+        "goal_alignment"
+      ],
+      "duration_mins": 120,
+      "prerequisites": [
+        126
+      ]
+    },
+    {
+      "course_id": 135,
+      "title": "Managing with Market Analysis",
+      "topic": "Strategy",
+      "level": "intermediate",
+      "skills_taught": [
+        "market_analysis",
+        "competitive_advantage",
+        "strategic_planning"
+      ],
+      "duration_mins": 120,
+      "prerequisites": [
+        127
+      ]
+    },
+    {
+      "course_id": 136,
+      "title": "Effective Competitive Advantage",
+      "topic": "Strategy",
+      "level": "intermediate",
+      "skills_taught": [
+        "competitive_advantage",
+        "goal_alignment",
+        "business_models"
+      ],
+      "duration_mins": 120,
+      "prerequisites": [
+        128
+      ]
+    },
+    {
+      "course_id": 137,
+      "title": "Advanced Scenario Planning",
+      "topic": "Strategy",
+      "level": "advanced",
+      "skills_taught": [
+        "scenario_planning",
+        "strategic_execution",
+        "corporate_strategy"
+      ],
+      "duration_mins": 120,
+      "prerequisites": [
+        129,
+        130
+      ]
+    },
+    {
+      "course_id": 138,
+      "title": "Strategic Strategic Execution",
+      "topic": "Strategy",
+      "level": "advanced",
+      "skills_taught": [
+        "strategic_execution",
+        "portfolio_strategy",
+        "business_strategy"
+      ],
+      "duration_mins": 180,
+      "prerequisites": [
+        131,
+        132
+      ]
+    },
+    {
+      "course_id": 139,
+      "title": "Mastering Portfolio Strategy",
+      "topic": "Strategy",
+      "level": "advanced",
+      "skills_taught": [
+        "portfolio_strategy",
+        "corporate_strategy",
+        "strategic_thinking"
+      ],
+      "duration_mins": 180,
+      "prerequisites": [
+        133,
+        134
+      ]
+    },
+    {
+      "course_id": 140,
+      "title": "Corporate Strategy for Senior Leaders",
+      "topic": "Strategy",
+      "level": "advanced",
+      "skills_taught": [
+        "corporate_strategy",
+        "business_strategy",
+        "market_analysis"
+      ],
+      "duration_mins": 180,
+      "prerequisites": [
+        135,
+        136
+      ]
+    },
+    {
+      "course_id": 141,
+      "title": "Operations Management Fundamentals",
+      "topic": "Operations",
+      "level": "beginner",
+      "skills_taught": [
+        "operations_management",
+        "process_mapping",
+        "resource_management"
+      ],
+      "duration_mins": 30,
+      "prerequisites": []
+    },
+    {
+      "course_id": 142,
+      "title": "Introduction to Process Mapping",
+      "topic": "Operations",
+      "level": "beginner",
+      "skills_taught": [
+        "process_mapping",
+        "work_planning",
+        "quality_management"
+      ],
+      "duration_mins": 60,
+      "prerequisites": []
+    },
+    {
+      "course_id": 143,
+      "title": "Essential Work Planning",
+      "topic": "Operations",
+      "level": "beginner",
+      "skills_taught": [
+        "work_planning",
+        "resource_management",
+        "inventory_management"
+      ],
+      "duration_mins": 60,
+      "prerequisites": []
+    },
+    {
+      "course_id": 144,
+      "title": "Getting Started with Resource Management",
+      "topic": "Operations",
+      "level": "beginner",
+      "skills_taught": [
+        "resource_management",
+        "quality_management",
+        "process_improvement"
+      ],
+      "duration_mins": 60,
+      "prerequisites": []
+    },
+    {
+      "course_id": 145,
+      "title": "Building Foundations in Quality Management",
+      "topic": "Operations",
+      "level": "beginner",
+      "skills_taught": [
+        "quality_management",
+        "inventory_management",
+        "supply_chain_management"
+      ],
+      "duration_mins": 90,
+      "prerequisites": []
+    },
+    {
+      "course_id": 146,
+      "title": "Inventory Management for the Workplace",
+      "topic": "Operations",
+      "level": "beginner",
+      "skills_taught": [
+        "inventory_management",
+        "process_improvement",
+        "operational_risk"
+      ],
+      "duration_mins": 60,
+      "prerequisites": []
+    },
+    {
+      "course_id": 147,
+      "title": "Understanding Process Improvement",
+      "topic": "Operations",
+      "level": "beginner",
+      "skills_taught": [
+        "process_improvement",
+        "supply_chain_management",
+        "service_operations"
+      ],
+      "duration_mins": 90,
+      "prerequisites": []
+    },
+    {
+      "course_id": 148,
+      "title": "Core Principles of Supply Chain Management",
+      "topic": "Operations",
+      "level": "beginner",
+      "skills_taught": [
+        "supply_chain_management",
+        "operational_risk",
+        "operational_excellence"
+      ],
+      "duration_mins": 90,
+      "prerequisites": []
+    },
+    {
+      "course_id": 149,
+      "title": "Practical Operational Risk",
+      "topic": "Operations",
+      "level": "intermediate",
+      "skills_taught": [
+        "operational_risk",
+        "service_operations",
+        "operations_strategy"
+      ],
+      "duration_mins": 60,
+      "prerequisites": [
+        141
+      ]
+    },
+    {
+      "course_id": 150,
+      "title": "Applying Service Operations at Work",
+      "topic": "Operations",
+      "level": "intermediate",
+      "skills_taught": [
+        "service_operations",
+        "operational_excellence",
+        "operations_management"
+      ],
+      "duration_mins": 90,
+      "prerequisites": [
+        142
+      ]
+    },
+    {
+      "course_id": 151,
+      "title": "Operational Excellence for Managers",
+      "topic": "Operations",
+      "level": "intermediate",
+      "skills_taught": [
+        "operational_excellence",
+        "operations_strategy",
+        "process_mapping"
+      ],
+      "duration_mins": 90,
+      "prerequisites": [
+        143
+      ]
+    },
+    {
+      "course_id": 152,
+      "title": "Improving Operations Strategy",
+      "topic": "Operations",
+      "level": "intermediate",
+      "skills_taught": [
+        "operations_strategy",
+        "operations_management",
+        "work_planning"
+      ],
+      "duration_mins": 120,
+      "prerequisites": [
+        144
+      ]
+    },
+    {
+      "course_id": 153,
+      "title": "Developing Stronger Operations Management",
+      "topic": "Operations",
+      "level": "intermediate",
+      "skills_taught": [
+        "operations_management",
+        "process_mapping",
+        "resource_management"
+      ],
+      "duration_mins": 90,
+      "prerequisites": [
+        145
+      ]
+    },
+    {
+      "course_id": 154,
+      "title": "Process Mapping in Practice",
+      "topic": "Operations",
+      "level": "intermediate",
+      "skills_taught": [
+        "process_mapping",
+        "work_planning",
+        "quality_management"
+      ],
+      "duration_mins": 120,
+      "prerequisites": [
+        146
+      ]
+    },
+    {
+      "course_id": 155,
+      "title": "Managing with Work Planning",
+      "topic": "Operations",
+      "level": "intermediate",
+      "skills_taught": [
+        "work_planning",
+        "resource_management",
+        "inventory_management"
+      ],
+      "duration_mins": 120,
+      "prerequisites": [
+        147
+      ]
+    },
+    {
+      "course_id": 156,
+      "title": "Effective Resource Management",
+      "topic": "Operations",
+      "level": "intermediate",
+      "skills_taught": [
+        "resource_management",
+        "quality_management",
+        "process_improvement"
+      ],
+      "duration_mins": 120,
+      "prerequisites": [
+        148
+      ]
+    },
+    {
+      "course_id": 157,
+      "title": "Advanced Operational Risk",
+      "topic": "Operations",
+      "level": "advanced",
+      "skills_taught": [
+        "operational_risk",
+        "service_operations",
+        "operations_strategy"
+      ],
+      "duration_mins": 120,
+      "prerequisites": [
+        149,
+        150
+      ]
+    },
+    {
+      "course_id": 158,
+      "title": "Strategic Service Operations",
+      "topic": "Operations",
+      "level": "advanced",
+      "skills_taught": [
+        "service_operations",
+        "operational_excellence",
+        "operations_management"
+      ],
+      "duration_mins": 180,
+      "prerequisites": [
+        151,
+        152
+      ]
+    },
+    {
+      "course_id": 159,
+      "title": "Mastering Operational Excellence",
+      "topic": "Operations",
+      "level": "advanced",
+      "skills_taught": [
+        "operational_excellence",
+        "operations_strategy",
+        "process_mapping"
+      ],
+      "duration_mins": 180,
+      "prerequisites": [
+        153,
+        154
+      ]
+    },
+    {
+      "course_id": 160,
+      "title": "Operations Strategy for Senior Leaders",
+      "topic": "Operations",
+      "level": "advanced",
+      "skills_taught": [
+        "operations_strategy",
+        "operations_management",
+        "work_planning"
+      ],
+      "duration_mins": 180,
+      "prerequisites": [
+        155,
+        156
+      ]
+    },
+    {
+      "course_id": 161,
+      "title": "Project Management Fundamentals",
+      "topic": "Project Management",
+      "level": "beginner",
+      "skills_taught": [
+        "project_management",
+        "scope_management",
+        "task_management"
+      ],
+      "duration_mins": 30,
+      "prerequisites": []
+    },
+    {
+      "course_id": 162,
+      "title": "Introduction to Project Scope",
+      "topic": "Project Management",
+      "level": "beginner",
+      "skills_taught": [
+        "scope_management",
+        "project_scheduling",
+        "project_communication"
+      ],
+      "duration_mins": 60,
+      "prerequisites": []
+    },
+    {
+      "course_id": 163,
+      "title": "Essential Project Scheduling",
+      "topic": "Project Management",
+      "level": "beginner",
+      "skills_taught": [
+        "project_scheduling",
+        "task_management",
+        "risk_management"
+      ],
+      "duration_mins": 60,
+      "prerequisites": []
+    },
+    {
+      "course_id": 164,
+      "title": "Getting Started with Task Management",
+      "topic": "Project Management",
+      "level": "beginner",
+      "skills_taught": [
+        "task_management",
+        "project_communication",
+        "stakeholder_management"
+      ],
+      "duration_mins": 60,
+      "prerequisites": []
+    },
+    {
+      "course_id": 165,
+      "title": "Building Foundations in Project Communication",
+      "topic": "Project Management",
+      "level": "beginner",
+      "skills_taught": [
+        "project_communication",
+        "risk_management",
+        "project_budgeting"
+      ],
+      "duration_mins": 90,
+      "prerequisites": []
+    },
+    {
+      "course_id": 166,
+      "title": "Risk Management for the Workplace",
+      "topic": "Project Management",
+      "level": "beginner",
+      "skills_taught": [
+        "risk_management",
+        "stakeholder_management",
+        "agile_delivery"
+      ],
+      "duration_mins": 60,
+      "prerequisites": []
+    },
+    {
+      "course_id": 167,
+      "title": "Understanding Stakeholder Management",
+      "topic": "Project Management",
+      "level": "beginner",
+      "skills_taught": [
+        "stakeholder_management",
+        "project_budgeting",
+        "project_monitoring"
+      ],
+      "duration_mins": 90,
+      "prerequisites": []
+    },
+    {
+      "course_id": 168,
+      "title": "Core Principles of Project Budgeting",
+      "topic": "Project Management",
+      "level": "beginner",
+      "skills_taught": [
+        "project_budgeting",
+        "agile_delivery",
+        "programme_management"
+      ],
+      "duration_mins": 90,
+      "prerequisites": []
+    },
+    {
+      "course_id": 169,
+      "title": "Practical Agile Project Delivery",
+      "topic": "Project Management",
+      "level": "intermediate",
+      "skills_taught": [
+        "agile_delivery",
+        "project_monitoring",
+        "portfolio_management"
+      ],
+      "duration_mins": 60,
+      "prerequisites": [
+        161
+      ]
+    },
+    {
+      "course_id": 170,
+      "title": "Applying Project Monitoring at Work",
+      "topic": "Project Management",
+      "level": "intermediate",
+      "skills_taught": [
+        "project_monitoring",
+        "programme_management",
+        "project_management"
+      ],
+      "duration_mins": 90,
+      "prerequisites": [
+        162
+      ]
+    },
+    {
+      "course_id": 171,
+      "title": "Programme Management for Managers",
+      "topic": "Project Management",
+      "level": "intermediate",
+      "skills_taught": [
+        "programme_management",
+        "portfolio_management",
+        "scope_management"
+      ],
+      "duration_mins": 90,
+      "prerequisites": [
+        163
+      ]
+    },
+    {
+      "course_id": 172,
+      "title": "Improving Project Portfolio Management",
+      "topic": "Project Management",
+      "level": "intermediate",
+      "skills_taught": [
+        "portfolio_management",
+        "project_management",
+        "project_scheduling"
+      ],
+      "duration_mins": 120,
+      "prerequisites": [
+        164
+      ]
+    },
+    {
+      "course_id": 173,
+      "title": "Developing Stronger Project Management",
+      "topic": "Project Management",
+      "level": "intermediate",
+      "skills_taught": [
+        "project_management",
+        "scope_management",
+        "task_management"
+      ],
+      "duration_mins": 90,
+      "prerequisites": [
+        165
+      ]
+    },
+    {
+      "course_id": 174,
+      "title": "Project Scope in Practice",
+      "topic": "Project Management",
+      "level": "intermediate",
+      "skills_taught": [
+        "scope_management",
+        "project_scheduling",
+        "project_communication"
+      ],
+      "duration_mins": 120,
+      "prerequisites": [
+        166
+      ]
+    },
+    {
+      "course_id": 175,
+      "title": "Managing with Project Scheduling",
+      "topic": "Project Management",
+      "level": "intermediate",
+      "skills_taught": [
+        "project_scheduling",
+        "task_management",
+        "risk_management"
+      ],
+      "duration_mins": 120,
+      "prerequisites": [
+        167
+      ]
+    },
+    {
+      "course_id": 176,
+      "title": "Effective Task Management",
+      "topic": "Project Management",
+      "level": "intermediate",
+      "skills_taught": [
+        "task_management",
+        "project_communication",
+        "stakeholder_management"
+      ],
+      "duration_mins": 120,
+      "prerequisites": [
+        168
+      ]
+    },
+    {
+      "course_id": 177,
+      "title": "Advanced Agile Project Delivery",
+      "topic": "Project Management",
+      "level": "advanced",
+      "skills_taught": [
+        "agile_delivery",
+        "project_monitoring",
+        "portfolio_management"
+      ],
+      "duration_mins": 120,
+      "prerequisites": [
+        169,
+        170
+      ]
+    },
+    {
+      "course_id": 178,
+      "title": "Strategic Project Monitoring",
+      "topic": "Project Management",
+      "level": "advanced",
+      "skills_taught": [
+        "project_monitoring",
+        "programme_management",
+        "project_management"
+      ],
+      "duration_mins": 180,
+      "prerequisites": [
+        171,
+        172
+      ]
+    },
+    {
+      "course_id": 179,
+      "title": "Mastering Programme Management",
+      "topic": "Project Management",
+      "level": "advanced",
+      "skills_taught": [
+        "programme_management",
+        "portfolio_management",
+        "scope_management"
+      ],
+      "duration_mins": 180,
+      "prerequisites": [
+        173,
+        174
+      ]
+    },
+    {
+      "course_id": 180,
+      "title": "Project Portfolio Management for Senior Leaders",
+      "topic": "Project Management",
+      "level": "advanced",
+      "skills_taught": [
+        "portfolio_management",
+        "project_management",
+        "project_scheduling"
+      ],
+      "duration_mins": 180,
+      "prerequisites": [
+        175,
+        176
+      ]
+    },
+    {
+      "course_id": 181,
+      "title": "Entrepreneurship Fundamentals",
+      "topic": "Entrepreneurship",
+      "level": "beginner",
+      "skills_taught": [
+        "entrepreneurship",
+        "problem_identification",
+        "value_proposition"
+      ],
+      "duration_mins": 30,
+      "prerequisites": []
+    },
+    {
+      "course_id": 182,
+      "title": "Introduction to Problem Identification",
+      "topic": "Entrepreneurship",
+      "level": "beginner",
+      "skills_taught": [
+        "problem_identification",
+        "customer_validation",
+        "business_models"
+      ],
+      "duration_mins": 60,
+      "prerequisites": []
+    },
+    {
+      "course_id": 183,
+      "title": "Essential Customer Validation",
+      "topic": "Entrepreneurship",
+      "level": "beginner",
+      "skills_taught": [
+        "customer_validation",
+        "value_proposition",
+        "small_business_finance"
+      ],
+      "duration_mins": 60,
+      "prerequisites": []
+    },
+    {
+      "course_id": 184,
+      "title": "Getting Started with Value Propositions",
+      "topic": "Entrepreneurship",
+      "level": "beginner",
+      "skills_taught": [
+        "value_proposition",
+        "business_models",
+        "product_development"
+      ],
+      "duration_mins": 60,
+      "prerequisites": []
+    },
+    {
+      "course_id": 185,
+      "title": "Building Foundations in Business Models",
+      "topic": "Entrepreneurship",
+      "level": "beginner",
+      "skills_taught": [
+        "business_models",
+        "small_business_finance",
+        "market_entry"
+      ],
+      "duration_mins": 90,
+      "prerequisites": []
+    },
+    {
+      "course_id": 186,
+      "title": "Small Business Finance for the Workplace",
+      "topic": "Entrepreneurship",
+      "level": "beginner",
+      "skills_taught": [
+        "small_business_finance",
+        "product_development",
+        "business_growth"
+      ],
+      "duration_mins": 60,
+      "prerequisites": []
+    },
+    {
+      "course_id": 187,
+      "title": "Understanding Product Development",
+      "topic": "Entrepreneurship",
+      "level": "beginner",
+      "skills_taught": [
+        "product_development",
+        "market_entry",
+        "entrepreneurial_leadership"
+      ],
+      "duration_mins": 90,
+      "prerequisites": []
+    },
+    {
+      "course_id": 188,
+      "title": "Core Principles of Market Entry",
+      "topic": "Entrepreneurship",
+      "level": "beginner",
+      "skills_taught": [
+        "market_entry",
+        "business_growth",
+        "business_scaling"
+      ],
+      "duration_mins": 90,
+      "prerequisites": []
+    },
+    {
+      "course_id": 189,
+      "title": "Practical Business Growth",
+      "topic": "Entrepreneurship",
+      "level": "intermediate",
+      "skills_taught": [
+        "business_growth",
+        "entrepreneurial_leadership",
+        "venture_strategy"
+      ],
+      "duration_mins": 60,
+      "prerequisites": [
+        181
+      ]
+    },
+    {
+      "course_id": 190,
+      "title": "Applying Entrepreneurial Leadership at Work",
+      "topic": "Entrepreneurship",
+      "level": "intermediate",
+      "skills_taught": [
+        "entrepreneurial_leadership",
+        "business_scaling",
+        "entrepreneurship"
+      ],
+      "duration_mins": 90,
+      "prerequisites": [
+        182
+      ]
+    },
+    {
+      "course_id": 191,
+      "title": "Business Scaling for Managers",
+      "topic": "Entrepreneurship",
+      "level": "intermediate",
+      "skills_taught": [
+        "business_scaling",
+        "venture_strategy",
+        "problem_identification"
+      ],
+      "duration_mins": 90,
+      "prerequisites": [
+        183
+      ]
+    },
+    {
+      "course_id": 192,
+      "title": "Improving Venture Strategy",
+      "topic": "Entrepreneurship",
+      "level": "intermediate",
+      "skills_taught": [
+        "venture_strategy",
+        "entrepreneurship",
+        "customer_validation"
+      ],
+      "duration_mins": 120,
+      "prerequisites": [
+        184
+      ]
+    },
+    {
+      "course_id": 193,
+      "title": "Developing Stronger Entrepreneurship",
+      "topic": "Entrepreneurship",
+      "level": "intermediate",
+      "skills_taught": [
+        "entrepreneurship",
+        "problem_identification",
+        "value_proposition"
+      ],
+      "duration_mins": 90,
+      "prerequisites": [
+        185
+      ]
+    },
+    {
+      "course_id": 194,
+      "title": "Problem Identification in Practice",
+      "topic": "Entrepreneurship",
+      "level": "intermediate",
+      "skills_taught": [
+        "problem_identification",
+        "customer_validation",
+        "business_models"
+      ],
+      "duration_mins": 120,
+      "prerequisites": [
+        186
+      ]
+    },
+    {
+      "course_id": 195,
+      "title": "Managing with Customer Validation",
+      "topic": "Entrepreneurship",
+      "level": "intermediate",
+      "skills_taught": [
+        "customer_validation",
+        "value_proposition",
+        "small_business_finance"
+      ],
+      "duration_mins": 120,
+      "prerequisites": [
+        187
+      ]
+    },
+    {
+      "course_id": 196,
+      "title": "Effective Value Propositions",
+      "topic": "Entrepreneurship",
+      "level": "intermediate",
+      "skills_taught": [
+        "value_proposition",
+        "business_models",
+        "product_development"
+      ],
+      "duration_mins": 120,
+      "prerequisites": [
+        188
+      ]
+    },
+    {
+      "course_id": 197,
+      "title": "Advanced Business Growth",
+      "topic": "Entrepreneurship",
+      "level": "advanced",
+      "skills_taught": [
+        "business_growth",
+        "entrepreneurial_leadership",
+        "venture_strategy"
+      ],
+      "duration_mins": 120,
+      "prerequisites": [
+        189,
+        190
+      ]
+    },
+    {
+      "course_id": 198,
+      "title": "Strategic Entrepreneurial Leadership",
+      "topic": "Entrepreneurship",
+      "level": "advanced",
+      "skills_taught": [
+        "entrepreneurial_leadership",
+        "business_scaling",
+        "entrepreneurship"
+      ],
+      "duration_mins": 180,
+      "prerequisites": [
+        191,
+        192
+      ]
+    },
+    {
+      "course_id": 199,
+      "title": "Mastering Business Scaling",
+      "topic": "Entrepreneurship",
+      "level": "advanced",
+      "skills_taught": [
+        "business_scaling",
+        "venture_strategy",
+        "problem_identification"
+      ],
+      "duration_mins": 180,
+      "prerequisites": [
+        193,
+        194
+      ]
+    },
+    {
+      "course_id": 200,
+      "title": "Venture Strategy for Senior Leaders",
+      "topic": "Entrepreneurship",
+      "level": "advanced",
+      "skills_taught": [
+        "venture_strategy",
+        "entrepreneurship",
+        "customer_validation"
+      ],
+      "duration_mins": 180,
+      "prerequisites": [
+        195,
+        196
+      ]
+    }
+  ]
+}
