@@ -1,8 +1,8 @@
-import type { Course } from "../../domain/entities/course.js";
+import type { Course } from "#models/course.js";
 
-import type { User, UserLearningContext } from "../../domain/entities/user.js";
+import type { User, UserLearningContext } from "#models/user.js";
 
-import type { SignalScoreResult } from "../../domain/entities/recommendation.js";
+import type { SignalScoreResult } from "#models/recommendation.js";
 
 export interface ProfileScoringService {
   score(

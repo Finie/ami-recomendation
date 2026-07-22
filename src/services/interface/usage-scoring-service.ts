@@ -1,8 +1,8 @@
-import type { Course } from "../../domain/entities/course.js";
+import type { Course } from "#models/course.js";
 
-import type { UsageEvent } from "../../domain/entities/usage-event.js";
+import type { UsageEvent } from "#models/usage-event.js";
 
-import type { SignalScoreResult } from "../../domain/entities/recommendation.js";
+import type { SignalScoreResult } from "#models/recommendation.js";
 
 export interface UsageScoringService {
   score(
