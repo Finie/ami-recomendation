@@ -18,11 +18,11 @@ export async function getRecommendationsForUser(
       return;
     }
 
-    const limitParam = req.query.limit;
-    const limit = limitParam === undefined ? undefined : Number(limitParam);
+    const nParam = req.query.n;
+    const limit = nParam === undefined ? undefined : Number(nParam);
 
     if (limit !== undefined && (!Number.isInteger(limit) || limit <= 0)) {
-      res.status(400).json({ error: "limit must be a positive integer." });
+      res.status(400).json({ error: "n must be a positive integer." });
       return;
     }
 
