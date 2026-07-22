@@ -1,99 +1,14 @@
-import { mkdir, readFile, writeFile } from "node:fs/promises";
-import { dirname, resolve } from "node:path";
-
-type CourseLevel = "beginner" | "intermediate" | "advanced";
-
-type CourseTopic =
-  | "Leadership"
-  | "People Management"
-  | "Communication"
-  | "Sales"
-  | "Customer Service"
-  | "Finance"
-  | "Strategy"
-  | "Operations"
-  | "Project Management"
-  | "Entrepreneurship";
-
-type ActivitySegment = "starting" | "light" | "existing" | "heavy";
-
-type UsageEventType = "started" | "completed" | "dropped";
-
-interface Course {
-  course_id: number;
-  title: string;
-  topic: CourseTopic;
-  level: CourseLevel;
-  skills_taught: string[];
-  duration_mins: number;
-  prerequisites: number[];
-}
-
-interface CourseDataset {
-  courses: Course[];
-}
-
-interface User {
-  user_id: number;
-  role: string;
-  industry: string;
-  company_size: string;
-  seniority: string;
-  stated_goal: string;
-}
-
-interface UserDataset {
-  users: User[];
-}
-
-interface UserLearningContext {
-  user_id: number;
-  role_family: string;
-  activity_segment: ActivitySegment;
-  primary_topics: CourseTopic[];
-  secondary_topics: CourseTopic[];
-  likely_skill_gaps: string[];
-}
-
-interface UserContextDataset {
-  contexts: UserLearningContext[];
-}
-
-interface SurveyResponse {
-  survey_response_id: number;
-  user_id: number;
-  skill_gaps: string[];
-  goals: string[];
-  preferred_topics: CourseTopic[];
-  confidence_by_topic: Partial<Record<CourseTopic, number>>;
-  submitted_at: string;
-}
-
-interface SurveyDataset {
-  survey_responses: SurveyResponse[];
-}
-
-interface UsageEvent {
-  usage_event_id: number;
-  user_id: number;
-  course_id: number;
-  event_type: UsageEventType;
-  progress_pct: number;
-  quiz_score: number | null;
-  timestamp: string;
-}
-
-interface UsageDataset {
-  metadata: {
-    total_users: number;
-    users_with_usage: number;
-    total_course_interactions: number;
-    total_usage_events: number;
-    users_by_segment: Record<ActivitySegment, number>;
-    seed: number;
-  };
-  usage_events: UsageEvent[];
-}
+import type { Course } from "#models/course.js";
+import type { ActivitySegment, User, UserLearningContext } from "#models/user.js";
+import type { SurveyResponse } from "#models/survey-response.js";
+import type { UsageEvent } from "#models/usage-event.js";
+import { prisma } from "#database/prisma-client.js";
+import {
+  fromPrismaCompanySize,
+  fromPrismaCourseTopic,
+  fromPrismaCourseTopics,
+} from "#database/mappers/prisma-enum-mappers.js";
+import { isMainModule } from "./run-if-main.js";
 
 interface WeightedValue<T> {
   value: T;
@@ -114,27 +29,15 @@ interface SelectedCourse {
 
 const RANDOM_SEED = 2028;
 
-const COURSES_INPUT_PATH = resolve(process.cwd(), "data", "courses.json");
-
-const USERS_INPUT_PATH = resolve(process.cwd(), "data", "users.json");
-
-const CONTEXT_INPUT_PATH = resolve(
-  process.cwd(),
-  "data",
-  "user-learning-context.json",
-);
-
-const SURVEYS_INPUT_PATH = resolve(
-  process.cwd(),
-  "data",
-  "survey_responses.json",
-);
-
-const USAGE_OUTPUT_PATH = resolve(process.cwd(), "data", "usage_events.json");
-
 const USAGE_PERIOD_START = new Date("2025-01-01T08:00:00.000Z");
 
 const USAGE_PERIOD_END = new Date("2026-06-30T18:00:00.000Z");
+
+/**
+ * Usage events are inserted in batches so a single INSERT never carries
+ * tens of thousands of rows at once.
+ */
+const INSERT_BATCH_SIZE = 2000;
 
 const activityConfigurations: Record<ActivitySegment, ActivityConfiguration> = {
   starting: {
@@ -473,7 +376,7 @@ function buildInteractionEvents(
   ];
 }
 
-function generateUsageEvents(
+export function generateUsageEvents(
   users: User[],
   courses: Course[],
   contexts: UserLearningContext[],
@@ -564,7 +467,7 @@ function generateUsageEvents(
   };
 }
 
-function validateUsageEvents(
+export function validateUsageEvents(
   users: User[],
   courses: Course[],
   contexts: UserLearningContext[],
@@ -624,7 +527,7 @@ function validateUsageEvents(
   }
 }
 
-function countUsersBySegment(
+export function countUsersBySegment(
   contexts: UserLearningContext[],
 ): Record<ActivitySegment, number> {
   const result: Record<ActivitySegment, number> = {
@@ -641,84 +544,148 @@ function countUsersBySegment(
   return result;
 }
 
-async function readJson<T>(path: string): Promise<T> {
-  try {
-    const contents = await readFile(path, "utf-8");
+interface FetchedDataset {
+  users: User[];
+  courses: Course[];
+  contexts: UserLearningContext[];
+  surveys: SurveyResponse[];
+}
 
-    return JSON.parse(contents) as T;
+async function fetchDatasetFromDatabase(): Promise<FetchedDataset> {
+  // Ordered explicitly on every query: the seeded RNG below is consumed in
+  // users/courses iteration order, so an unordered fetch would make usage
+  // event generation non-deterministic across process runs even with a
+  // fixed seed.
+  const [prismaUsers, prismaCourses, prismaContexts, prismaSurveys] =
+    await Promise.all([
+      prisma.user.findMany({ orderBy: { userId: "asc" } }),
+      prisma.course.findMany({
+        include: { prerequisites: { select: { prerequisiteCourseId: true } } },
+        orderBy: { courseId: "asc" },
+      }),
+      prisma.userLearningContext.findMany({ orderBy: { userId: "asc" } }),
+      prisma.surveyResponse.findMany({ orderBy: { userId: "asc" } }),
+    ]);
+
+  const users: User[] = prismaUsers.map((user) => ({
+    user_id: user.userId,
+    role: user.role,
+    industry: user.industry,
+    company_size: fromPrismaCompanySize(user.companySize),
+    seniority: user.seniority,
+    stated_goal: user.statedGoal,
+  }));
+
+  // Usage-event selection only reads topic/skills/level, never
+  // prerequisites, but they're included here since they come for free
+  // and keep this Course shape consistent with the repository mapping.
+  const courses: Course[] = prismaCourses.map((course) => ({
+    course_id: course.courseId,
+    title: course.title,
+    topic: fromPrismaCourseTopic(course.topic),
+    level: course.level,
+    skills_taught: course.skillsTaught,
+    duration_mins: course.durationMins,
+    prerequisites: course.prerequisites.map((link) => link.prerequisiteCourseId),
+  }));
+
+  const contexts: UserLearningContext[] = prismaContexts.map((context) => ({
+    user_id: context.userId,
+    role_family: context.roleFamily,
+    activity_segment: context.activitySegment,
+    primary_topics: fromPrismaCourseTopics(context.primaryTopics),
+    secondary_topics: fromPrismaCourseTopics(context.secondaryTopics),
+    likely_skill_gaps: context.likelySkillGaps,
+  }));
+
+  const surveys: SurveyResponse[] = prismaSurveys.map((survey) => ({
+    survey_response_id: survey.surveyResponseId,
+    user_id: survey.userId,
+    skill_gaps: survey.skillGaps,
+    goals: survey.goals,
+    preferred_topics: fromPrismaCourseTopics(survey.preferredTopics),
+    confidence_by_topic: survey.confidenceByTopic as Partial<
+      Record<Course["topic"], number>
+    >,
+    submitted_at: survey.submittedAt.toISOString(),
+  }));
+
+  return { users, courses, contexts, surveys };
+}
+
+function chunk<T>(values: readonly T[], size: number): T[][] {
+  const chunks: T[][] = [];
+
+  for (let index = 0; index < values.length; index += size) {
+    chunks.push(values.slice(index, index + size));
+  }
+
+  return chunks;
+}
+
+/**
+ * Persists an already-generated, already-validated usage event dataset to
+ * PostgreSQL in fixed-size batches, so a single INSERT never carries the
+ * full multi-thousand-row dataset.
+ */
+export async function saveUsageEvents(events: UsageEvent[]): Promise<void> {
+  try {
+    for (const batch of chunk(events, INSERT_BATCH_SIZE)) {
+      await prisma.usageEvent.createMany({
+        data: batch.map((event) => ({
+          usageEventId: event.usage_event_id,
+          userId: event.user_id,
+          courseId: event.course_id,
+          eventType: event.event_type,
+          progressPct: event.progress_pct,
+          quizScore: event.quiz_score,
+          timestamp: new Date(event.timestamp),
+        })),
+      });
+    }
   } catch (error: unknown) {
     const message = error instanceof Error ? error.message : String(error);
-
-    throw new Error(`Failed to read ${path}: ${message}`);
+    throw new Error(`Failed to save usage events: ${message}`);
   }
 }
 
-async function saveJson(path: string, value: unknown): Promise<void> {
-  await mkdir(dirname(path), {
-    recursive: true,
-  });
+/**
+ * Retrieves courses, users, contexts and surveys from PostgreSQL, generates
+ * usage events, and persists them through Prisma in fixed-size batches.
+ */
+export async function generateAndSaveUsageEvents(): Promise<UsageEvent[]> {
+  const { users, courses, contexts, surveys } = await fetchDatasetFromDatabase();
 
-  await writeFile(path, JSON.stringify(value, null, 2), "utf-8");
+  const { events } = generateUsageEvents(users, courses, contexts, surveys);
+
+  validateUsageEvents(users, courses, contexts, events);
+
+  await saveUsageEvents(events);
+
+  return events;
 }
 
 async function main(): Promise<void> {
-  const [courseDataset, userDataset, contextDataset, surveyDataset] =
-    await Promise.all([
-      readJson<CourseDataset>(COURSES_INPUT_PATH),
-      readJson<UserDataset>(USERS_INPUT_PATH),
-      readJson<UserContextDataset>(CONTEXT_INPUT_PATH),
-      readJson<SurveyDataset>(SURVEYS_INPUT_PATH),
-    ]);
+  const { users, contexts } = await fetchDatasetFromDatabase();
 
-  const { events, interactionCount } = generateUsageEvents(
-    userDataset.users,
-    courseDataset.courses,
-    contextDataset.contexts,
-    surveyDataset.survey_responses,
-  );
-
-  validateUsageEvents(
-    userDataset.users,
-    courseDataset.courses,
-    contextDataset.contexts,
-    events,
-  );
+  const events = await generateAndSaveUsageEvents();
 
   const usersWithUsage = new Set(events.map((event) => event.user_id)).size;
 
-  const dataset: UsageDataset = {
-    metadata: {
-      total_users: userDataset.users.length,
-
-      users_with_usage: usersWithUsage,
-
-      total_course_interactions: interactionCount,
-
-      total_usage_events: events.length,
-
-      users_by_segment: countUsersBySegment(contextDataset.contexts),
-
-      seed: RANDOM_SEED,
-    },
-
-    usage_events: events,
-  };
-
-  await saveJson(USAGE_OUTPUT_PATH, dataset);
-
-  console.log("Usage events generated successfully.");
-
-  console.log(`Course interactions: ${interactionCount}`);
-
+  console.log("Usage events generated and inserted successfully.");
   console.log(`Usage events: ${events.length}`);
-
   console.log(`Users with usage: ${usersWithUsage}`);
-
-  console.log(`Output: ${USAGE_OUTPUT_PATH}`);
+  console.log("Users by segment:", countUsersBySegment(contexts));
+  console.log(`Total users: ${users.length}`);
 }
 
-main().catch((error: unknown) => {
-  console.error("Failed to generate usage events:", error);
-
-  process.exitCode = 1;
-});
+if (isMainModule(import.meta.url)) {
+  main()
+    .catch((error: unknown) => {
+      console.error("Failed to generate usage events:", error);
+      process.exitCode = 1;
+    })
+    .finally(() => {
+      void prisma.$disconnect();
+    });
+}

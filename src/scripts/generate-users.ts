@@ -1,75 +1,17 @@
-import { mkdir, writeFile } from "node:fs/promises";
-import { dirname, resolve } from "node:path";
-
-type Seniority =
-  | "entry"
-  | "junior"
-  | "mid"
-  | "senior"
-  | "manager"
-  | "director"
-  | "executive";
-
-type CompanySize =
-  | "1-10"
-  | "11-50"
-  | "51-200"
-  | "201-500"
-  | "501-1000"
-  | "1000+";
-
-type CourseTopic =
-  | "Leadership"
-  | "People Management"
-  | "Communication"
-  | "Sales"
-  | "Customer Service"
-  | "Finance"
-  | "Strategy"
-  | "Operations"
-  | "Project Management"
-  | "Entrepreneurship";
-
-type ActivitySegment =
-  | "starting"
-  | "light"
-  | "existing"
-  | "heavy";
-
-interface User {
-  user_id: number;
-  role: string;
-  industry: string;
-  company_size: CompanySize;
-  seniority: Seniority;
-  stated_goal: string;
-}
-
-interface GeneratedUserContext {
-  user_id: number;
-  role_family: string;
-  activity_segment: ActivitySegment;
-  primary_topics: CourseTopic[];
-  secondary_topics: CourseTopic[];
-  likely_skill_gaps: string[];
-}
-
-interface UserDataset {
-  metadata: {
-    total_users: number;
-    seed: number;
-  };
-  users: User[];
-}
-
-interface UserContextDataset {
-  metadata: {
-    total_users: number;
-    purpose: string;
-    users_by_activity_segment: Record<ActivitySegment, number>;
-  };
-  contexts: GeneratedUserContext[];
-}
+import type { CourseTopic } from "#models/course.js";
+import type {
+  ActivitySegment,
+  CompanySize,
+  Seniority,
+  User,
+  UserLearningContext,
+} from "#models/user.js";
+import { prisma } from "#database/prisma-client.js";
+import {
+  toPrismaCompanySize,
+  toPrismaCourseTopics,
+} from "#database/mappers/prisma-enum-mappers.js";
+import { isMainModule } from "./run-if-main.js";
 
 interface RoleProfile {
   role: string;
@@ -89,14 +31,6 @@ interface WeightedValue<T> {
 
 const TOTAL_USERS = 1_000;
 const RANDOM_SEED = 2026;
-
-const USERS_OUTPUT_PATH = resolve(process.cwd(), "data", "users.json");
-
-const CONTEXT_OUTPUT_PATH = resolve(
-  process.cwd(),
-  "data",
-  "user-learning-context.json",
-);
 
 /**
  * Small deterministic pseudo-random generator.
@@ -169,46 +103,16 @@ function uniqueValues<T>(values: T[]): T[] {
 }
 
 const industries: WeightedValue<string>[] = [
-  {
-    value: "Financial Services",
-    weight: 14,
-  },
-  {
-    value: "Technology",
-    weight: 13,
-  },
-  {
-    value: "Retail",
-    weight: 12,
-  },
-  {
-    value: "Professional Services",
-    weight: 11,
-  },
-  {
-    value: "Education",
-    weight: 10,
-  },
-  {
-    value: "Healthcare",
-    weight: 10,
-  },
-  {
-    value: "Manufacturing",
-    weight: 9,
-  },
-  {
-    value: "Agriculture",
-    weight: 8,
-  },
-  {
-    value: "Logistics",
-    weight: 7,
-  },
-  {
-    value: "Hospitality",
-    weight: 6,
-  },
+  { value: "Financial Services", weight: 14 },
+  { value: "Technology", weight: 13 },
+  { value: "Retail", weight: 12 },
+  { value: "Professional Services", weight: 11 },
+  { value: "Education", weight: 10 },
+  { value: "Healthcare", weight: 10 },
+  { value: "Manufacturing", weight: 9 },
+  { value: "Agriculture", weight: 8 },
+  { value: "Logistics", weight: 7 },
+  { value: "Hospitality", weight: 6 },
 ];
 
 const roleProfiles: RoleProfile[] = [
@@ -645,57 +549,21 @@ const roleProfiles: RoleProfile[] = [
 ];
 
 const roleFamilyWeights: WeightedValue<string>[] = [
-  {
-    value: "leadership",
-    weight: 15,
-  },
-  {
-    value: "people_management",
-    weight: 11,
-  },
-  {
-    value: "sales",
-    weight: 15,
-  },
-  {
-    value: "customer_service",
-    weight: 10,
-  },
-  {
-    value: "finance",
-    weight: 10,
-  },
-  {
-    value: "operations",
-    weight: 13,
-  },
-  {
-    value: "project_management",
-    weight: 13,
-  },
-  {
-    value: "entrepreneurship",
-    weight: 13,
-  },
+  { value: "leadership", weight: 15 },
+  { value: "people_management", weight: 11 },
+  { value: "sales", weight: 15 },
+  { value: "customer_service", weight: 10 },
+  { value: "finance", weight: 10 },
+  { value: "operations", weight: 13 },
+  { value: "project_management", weight: 13 },
+  { value: "entrepreneurship", weight: 13 },
 ];
 
 const activitySegmentWeights: WeightedValue<ActivitySegment>[] = [
-  {
-    value: "starting",
-    weight: 20,
-  },
-  {
-    value: "light",
-    weight: 30,
-  },
-  {
-    value: "existing",
-    weight: 35,
-  },
-  {
-    value: "heavy",
-    weight: 15,
-  },
+  { value: "starting", weight: 20 },
+  { value: "light", weight: 30 },
+  { value: "existing", weight: 35 },
+  { value: "heavy", weight: 15 },
 ];
 
 function chooseRoleProfile(): RoleProfile {
@@ -734,12 +602,12 @@ function chooseCompanySize(profile: RoleProfile): CompanySize {
   return chooseOne(profile.preferredCompanySizes);
 }
 
-function generateUsers(): {
+export function generateUsers(): {
   users: User[];
-  contexts: GeneratedUserContext[];
+  contexts: UserLearningContext[];
 } {
   const users: User[] = [];
-  const contexts: GeneratedUserContext[] = [];
+  const contexts: UserLearningContext[] = [];
 
   for (let userId = 1; userId <= TOTAL_USERS; userId++) {
     const profile = chooseRoleProfile();
@@ -754,7 +622,7 @@ function generateUsers(): {
       stated_goal: chooseGoal(profile, seniority),
     };
 
-    const context: GeneratedUserContext = {
+    const context: UserLearningContext = {
       user_id: userId,
       role_family: profile.roleFamily,
       activity_segment: chooseWeighted(activitySegmentWeights),
@@ -767,13 +635,10 @@ function generateUsers(): {
     contexts.push(context);
   }
 
-  return {
-    users,
-    contexts,
-  };
+  return { users, contexts };
 }
 
-function validateUsers(users: User[]): void {
+export function validateUsers(users: User[]): void {
   if (users.length !== TOTAL_USERS) {
     throw new Error(
       `Expected ${TOTAL_USERS} users, generated ${users.length}.`,
@@ -808,7 +673,10 @@ const validActivitySegments = new Set<ActivitySegment>([
   "heavy",
 ]);
 
-function validateContexts(users: User[], contexts: GeneratedUserContext[]): void {
+export function validateContexts(
+  users: User[],
+  contexts: UserLearningContext[],
+): void {
   if (contexts.length !== users.length) {
     throw new Error(
       `Expected ${users.length} contexts, generated ${contexts.length}.`,
@@ -841,8 +709,8 @@ function validateContexts(users: User[], contexts: GeneratedUserContext[]): void
   }
 }
 
-function countUsersByActivitySegment(
-  contexts: GeneratedUserContext[],
+export function countUsersByActivitySegment(
+  contexts: UserLearningContext[],
 ): Record<ActivitySegment, number> {
   const counts: Record<ActivitySegment, number> = {
     starting: 0,
@@ -858,54 +726,76 @@ function countUsersByActivitySegment(
   return counts;
 }
 
-async function saveJson(path: string, value: unknown): Promise<void> {
-  await mkdir(dirname(path), {
-    recursive: true,
-  });
-
-  await writeFile(path, JSON.stringify(value, null, 2), "utf-8");
+/**
+ * Persists already-generated, already-validated users and their learning
+ * contexts to PostgreSQL. Users are inserted before contexts, in a single
+ * transaction, since contexts reference user_id via a foreign key.
+ */
+export async function saveUsers(
+  users: User[],
+  contexts: UserLearningContext[],
+): Promise<void> {
+  try {
+    await prisma.$transaction([
+      prisma.user.createMany({
+        data: users.map((user) => ({
+          userId: user.user_id,
+          role: user.role,
+          industry: user.industry,
+          companySize: toPrismaCompanySize(user.company_size),
+          seniority: user.seniority,
+          statedGoal: user.stated_goal,
+        })),
+      }),
+      prisma.userLearningContext.createMany({
+        data: contexts.map((context) => ({
+          userId: context.user_id,
+          roleFamily: context.role_family,
+          activitySegment: context.activity_segment,
+          primaryTopics: toPrismaCourseTopics(context.primary_topics),
+          secondaryTopics: toPrismaCourseTopics(context.secondary_topics),
+          likelySkillGaps: context.likely_skill_gaps,
+        })),
+      }),
+    ]);
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : String(error);
+    throw new Error(`Failed to save users: ${message}`);
+  }
 }
 
-async function main(): Promise<void> {
+export async function generateAndSaveUsers(): Promise<{
+  users: User[];
+  contexts: UserLearningContext[];
+}> {
   const { users, contexts } = generateUsers();
 
   validateUsers(users);
   validateContexts(users, contexts);
 
-  const userDataset: UserDataset = {
-    metadata: {
-      total_users: users.length,
-      seed: RANDOM_SEED,
-    },
-    users,
-  };
+  await saveUsers(users, contexts);
+
+  return { users, contexts };
+}
+
+async function main(): Promise<void> {
+  const { users, contexts } = await generateAndSaveUsers();
 
   const segmentCounts = countUsersByActivitySegment(contexts);
 
-  const contextDataset: UserContextDataset = {
-    metadata: {
-      total_users: contexts.length,
-      purpose: "Internal context for generating surveys and usage events.",
-      users_by_activity_segment: segmentCounts,
-    },
-    contexts,
-  };
-
-  await Promise.all([
-    saveJson(USERS_OUTPUT_PATH, userDataset),
-    saveJson(CONTEXT_OUTPUT_PATH, contextDataset),
-  ]);
-
-  console.log("Activity segment distribution:", segmentCounts);
-
-  console.log("User datasets generated successfully.");
+  console.log("User dataset generated and inserted successfully.");
   console.log(`Users: ${users.length}`);
-  console.log(`Users file: ${USERS_OUTPUT_PATH}`);
-  console.log(`Context file: ${CONTEXT_OUTPUT_PATH}`);
+  console.log(`Learning contexts: ${contexts.length}`);
+  console.log("Activity segment distribution:", segmentCounts);
 }
 
-main().catch((error: unknown) => {
-  console.error("Failed to generate users:", error);
-
-  process.exitCode = 1;
-});
+if (isMainModule(import.meta.url)) {
+  main()
+    .catch((error: unknown) => {
+      console.error("Failed to generate users:", error);
+      process.exitCode = 1;
+    })
+    .finally(() => {
+      void prisma.$disconnect();
+    });
+}

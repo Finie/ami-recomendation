@@ -1,7 +1,6 @@
 generator client {
-  provider        = "prisma-client"
-  output          = "../src/generated/prisma"
-  previewFeatures = ["partialIndexes"]
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
 }
 
 datasource db {
@@ -30,32 +29,110 @@ enum Seniority {
   executive
 }
 
-model User {
-  userId       Int       @id @default(autoincrement()) @map("user_id")
-  role         String
-  industry     String
-  companySize  String    @map("company_size")
-  seniority    Seniority
-  statedGoal   String    @map("stated_goal")
+enum ActivitySegment {
+  starting
+  light
+  existing
+  heavy
+}
 
-  usageEvents   UsageEvent[]
-  surveyResponse SurveyResponse?
+// TypeScript union uses non-identifier strings ("1-10", "1000+", ...),
+// so each member maps to its real database value via @map.
+enum CompanySize {
+  size_1_10      @map("1-10")
+  size_11_50     @map("11-50")
+  size_51_200    @map("51-200")
+  size_201_500   @map("201-500")
+  size_501_1000  @map("501-1000")
+  size_1000_plus @map("1000+")
+}
+
+// TypeScript union uses human-readable, space-containing strings,
+// so each member maps to its real database value via @map.
+enum CourseTopic {
+  leadership         @map("Leadership")
+  people_management  @map("People Management")
+  communication      @map("Communication")
+  sales              @map("Sales")
+  customer_service   @map("Customer Service")
+  finance            @map("Finance")
+  strategy           @map("Strategy")
+  operations         @map("Operations")
+  project_management @map("Project Management")
+  entrepreneurship   @map("Entrepreneurship")
+}
+
+model User {
+  userId      Int         @id @default(autoincrement()) @map("user_id")
+  role        String
+  industry    String
+  companySize CompanySize @map("company_size")
+  seniority   Seniority
+  statedGoal  String      @map("stated_goal")
+
+  learningContext UserLearningContext?
+  surveyResponse  SurveyResponse?
+  usageEvents     UsageEvent[]
 
   @@map("users")
 }
 
+model UserLearningContext {
+  userLearningContextId Int             @id @default(autoincrement()) @map("user_learning_context_id")
+  userId                Int             @unique @map("user_id")
+  roleFamily            String          @map("role_family")
+  activitySegment       ActivitySegment @map("activity_segment")
+  primaryTopics         CourseTopic[]   @map("primary_topics")
+  secondaryTopics       CourseTopic[]   @map("secondary_topics")
+  likelySkillGaps       String[]        @map("likely_skill_gaps")
+
+  user User @relation(fields: [userId], references: [userId], onDelete: Cascade)
+
+  @@map("user_learning_contexts")
+}
+
 model Course {
-  courseId      Int         @id @default(autoincrement()) @map("course_id")
-  title         String
-  topic         String
-  level         CourseLevel
-  skillsTaught  String[]    @map("skills_taught")
-  durationMins  Int         @map("duration_mins")
-  prerequisites String[]    @default([])
+  courseId     Int         @id @default(autoincrement()) @map("course_id")
+  title        String
+  topic        CourseTopic
+  level        CourseLevel
+  skillsTaught String[]    @map("skills_taught")
+  durationMins Int         @map("duration_mins")
 
   usageEvents UsageEvent[]
 
+  prerequisites CoursePrerequisite[] @relation("CoursePrerequisites")
+  requiredFor   CoursePrerequisite[] @relation("RequiredCourse")
+
+  @@index([topic])
+  @@index([level])
   @@map("courses")
+}
+
+model CoursePrerequisite {
+  courseId             Int @map("course_id")
+  prerequisiteCourseId Int @map("prerequisite_course_id")
+
+  course             Course @relation("CoursePrerequisites", fields: [courseId], references: [courseId], onDelete: Cascade)
+  prerequisiteCourse Course @relation("RequiredCourse", fields: [prerequisiteCourseId], references: [courseId], onDelete: Cascade)
+
+  @@id([courseId, prerequisiteCourseId])
+  @@index([prerequisiteCourseId])
+  @@map("course_prerequisites")
+}
+
+model SurveyResponse {
+  surveyResponseId  Int           @id @default(autoincrement()) @map("survey_response_id")
+  userId            Int           @unique @map("user_id")
+  skillGaps         String[]      @map("skill_gaps")
+  goals             String[]
+  preferredTopics   CourseTopic[] @map("preferred_topics")
+  confidenceByTopic Json          @map("confidence_by_topic")
+  submittedAt       DateTime      @map("submitted_at")
+
+  user User @relation(fields: [userId], references: [userId], onDelete: Cascade)
+
+  @@map("survey_responses")
 }
 
 model UsageEvent {
@@ -65,7 +142,7 @@ model UsageEvent {
   eventType    UsageEventType @map("event_type")
   progressPct  Int            @map("progress_pct")
   quizScore    Float?         @map("quiz_score")
-  timestamp    DateTime       @default(now())
+  timestamp    DateTime
 
   user   User   @relation(fields: [userId], references: [userId], onDelete: Cascade)
   course Course @relation(fields: [courseId], references: [courseId], onDelete: Cascade)
@@ -74,18 +151,6 @@ model UsageEvent {
   @@index([courseId])
   @@index([userId, courseId])
   @@index([eventType])
+  @@index([timestamp])
   @@map("usage_events")
-}
-
-model SurveyResponse {
-  surveyResponseId  Int      @id @default(autoincrement()) @map("survey_response_id")
-  userId            Int      @unique @map("user_id")
-  skillGaps         String[] @map("skill_gaps")
-  goals             String[]
-  preferredTopics   String[] @map("preferred_topics")
-  confidenceByTopic Json     @map("confidence_by_topic")
-
-  user User @relation(fields: [userId], references: [userId], onDelete: Cascade)
-
-  @@map("survey_responses")
 }

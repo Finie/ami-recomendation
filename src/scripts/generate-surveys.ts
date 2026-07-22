@@ -1,112 +1,13 @@
-import { mkdir, readFile, writeFile } from "node:fs/promises";
-import { dirname, resolve } from "node:path";
-
-type Seniority =
-  | "entry"
-  | "junior"
-  | "mid"
-  | "senior"
-  | "manager"
-  | "director"
-  | "executive";
-
-type CompanySize =
-  | "1-10"
-  | "11-50"
-  | "51-200"
-  | "201-500"
-  | "501-1000"
-  | "1000+";
-
-type CourseTopic =
-  | "Leadership"
-  | "People Management"
-  | "Communication"
-  | "Sales"
-  | "Customer Service"
-  | "Finance"
-  | "Strategy"
-  | "Operations"
-  | "Project Management"
-  | "Entrepreneurship";
-
-type ActivitySegment = "starting" | "light" | "existing" | "heavy";
-
-interface User {
-  user_id: number;
-  role: string;
-  industry: string;
-  company_size: CompanySize;
-  seniority: Seniority;
-  stated_goal: string;
-}
-
-interface UserDataset {
-  metadata: {
-    total_users: number;
-    seed: number;
-  };
-  users: User[];
-}
-
-interface GeneratedUserContext {
-  user_id: number;
-  role_family: string;
-
-  /**
-   * Optional so the script still works with your current
-   * user-learning-context.json.
-   */
-  activity_segment?: ActivitySegment;
-
-  primary_topics: CourseTopic[];
-  secondary_topics: CourseTopic[];
-  likely_skill_gaps: string[];
-}
-
-interface UserContextDataset {
-  metadata: {
-    total_users: number;
-    purpose: string;
-  };
-  contexts: GeneratedUserContext[];
-}
-
-interface SurveyResponse {
-  survey_response_id: number;
-  user_id: number;
-
-  skill_gaps: string[];
-  goals: string[];
-  preferred_topics: CourseTopic[];
-
-  /**
-   * Confidence uses a scale from 1 to 5:
-   *
-   * 1 = very low confidence
-   * 2 = low confidence
-   * 3 = moderate confidence
-   * 4 = high confidence
-   * 5 = very high confidence
-   */
-  confidence_by_topic: Partial<Record<CourseTopic, number>>;
-
-  submitted_at: string;
-}
-
-interface SurveyDataset {
-  metadata: {
-    total_users: number;
-    total_survey_responses: number;
-    survey_completion_rate: number;
-    confidence_scale: {
-      minimum: number;
-      maximum: number;
-    };
-    seed: number;
-  };
-  survey_responses: SurveyResponse[];
-}
+import type { CourseTopic } from "#models/course.js";
+import type { ActivitySegment, Seniority, User, UserLearningContext } from "#models/user.js";
+import type { SurveyResponse } from "#models/survey-response.js";
+import { prisma } from "#database/prisma-client.js";
+import {
+  fromPrismaCompanySize,
+  fromPrismaCourseTopics,
+  toPrismaCourseTopics,
+} from "#database/mappers/prisma-enum-mappers.js";
+import { isMainModule } from "./run-if-main.js";
 
 interface WeightedValue<T> {
   value: T;
@@ -115,22 +16,8 @@ interface WeightedValue<T> {
 
 const RANDOM_SEED = 2027;
 
-const USERS_INPUT_PATH = resolve(process.cwd(), "data", "users.json");
-
-const CONTEXT_INPUT_PATH = resolve(
-  process.cwd(),
-  "data",
-  "user-learning-context.json",
-);
-
-const SURVEYS_OUTPUT_PATH = resolve(
-  process.cwd(),
-  "data",
-  "survey_responses.json",
-);
-
 /**
- * Survey dates will be generated within this period.
+ * Survey dates are generated within this period.
  *
  * Keeping the dates fixed makes the generated dataset
  * deterministic and reproducible.
@@ -274,7 +161,7 @@ function topicToTag(topic: CourseTopic): string {
   return toTag(topic);
 }
 
-function getSurveyProbability(activitySegment?: ActivitySegment): number {
+function getSurveyProbability(activitySegment: ActivitySegment): number {
   switch (activitySegment) {
     case "starting":
       return 0.98;
@@ -287,30 +174,23 @@ function getSurveyProbability(activitySegment?: ActivitySegment): number {
 
     case "heavy":
       return 0.85;
-
-    default:
-      /**
-       * Supports the existing context file before
-       * activity_segment is added.
-       */
-      return 0.9;
   }
 }
 
-function shouldGenerateSurvey(context: GeneratedUserContext): boolean {
+function shouldGenerateSurvey(context: UserLearningContext): boolean {
   const probability = getSurveyProbability(context.activity_segment);
 
   return random() < probability;
 }
 
-function generateSkillGaps(context: GeneratedUserContext): string[] {
+function generateSkillGaps(context: UserLearningContext): string[] {
   /**
    * Most users identify between two and four skill gaps.
    */
   return selectRandomValues(uniqueValues(context.likely_skill_gaps), 2, 4);
 }
 
-function generatePreferredTopics(context: GeneratedUserContext): CourseTopic[] {
+function generatePreferredTopics(context: UserLearningContext): CourseTopic[] {
   /**
    * Primary topics should almost always appear.
    */
@@ -326,7 +206,7 @@ function generatePreferredTopics(context: GeneratedUserContext): CourseTopic[] {
 
 function generateGoals(
   user: User,
-  context: GeneratedUserContext,
+  context: UserLearningContext,
   skillGaps: string[],
 ): string[] {
   const goals: string[] = [toTag(user.stated_goal)];
@@ -383,7 +263,7 @@ function clampConfidence(value: number): number {
 
 function generateTopicConfidence(
   user: User,
-  context: GeneratedUserContext,
+  context: UserLearningContext,
   preferredTopics: CourseTopic[],
 ): Partial<Record<CourseTopic, number>> {
   const confidence: Partial<Record<CourseTopic, number>> = {};
@@ -403,18 +283,9 @@ function generateTopicConfidence(
     const primaryAdjustment = isPrimaryTopic ? 0 : -1;
 
     const randomAdjustment = chooseWeighted([
-      {
-        value: -1,
-        weight: 30,
-      },
-      {
-        value: 0,
-        weight: 50,
-      },
-      {
-        value: 1,
-        weight: 20,
-      },
+      { value: -1, weight: 30 },
+      { value: 0, weight: 50 },
+      { value: 1, weight: 20 },
     ]);
 
     confidence[topic] = clampConfidence(
@@ -434,9 +305,9 @@ function generateSurveyDate(): string {
   return new Date(timestamp).toISOString();
 }
 
-function generateSurveyResponses(
+export function generateSurveyResponses(
   users: User[],
-  contexts: GeneratedUserContext[],
+  contexts: UserLearningContext[],
 ): SurveyResponse[] {
   const contextsByUserId = new Map(
     contexts.map((context) => [context.user_id, context]),
@@ -461,21 +332,15 @@ function generateSurveyResponses(
 
     responses.push({
       survey_response_id: responses.length + 1,
-
       user_id: user.user_id,
-
       skill_gaps: skillGaps,
-
       goals: generateGoals(user, context, skillGaps),
-
       preferred_topics: preferredTopics,
-
       confidence_by_topic: generateTopicConfidence(
         user,
         context,
         preferredTopics,
       ),
-
       submitted_at: generateSurveyDate(),
     });
   }
@@ -483,7 +348,7 @@ function generateSurveyResponses(
   return responses;
 }
 
-function validateSurveyResponses(
+export function validateSurveyResponses(
   users: User[],
   responses: SurveyResponse[],
 ): void {
@@ -523,7 +388,12 @@ function validateSurveyResponses(
     for (const [topic, confidence] of Object.entries(
       response.confidence_by_topic,
     )) {
-      if (confidence === undefined || confidence < 1 || confidence > 5) {
+      if (
+        confidence === undefined ||
+        !Number.isInteger(confidence) ||
+        confidence < 1 ||
+        confidence > 5
+      ) {
         throw new Error(
           `Invalid confidence ${confidence} for topic ${topic} on user ${response.user_id}.`,
         );
@@ -532,75 +402,111 @@ function validateSurveyResponses(
   }
 }
 
-async function readJson<T>(path: string): Promise<T> {
-  try {
-    const content = await readFile(path, "utf-8");
+async function fetchUsersAndContexts(): Promise<{
+  users: User[];
+  contexts: UserLearningContext[];
+}> {
+  // Ordered explicitly: the seeded RNG below is consumed once per user in
+  // iteration order, so an unordered fetch would make survey generation
+  // non-deterministic across process runs even with a fixed seed.
+  const prismaUsers = await prisma.user.findMany({
+    include: { learningContext: true },
+    orderBy: { userId: "asc" },
+  });
 
-    return JSON.parse(content) as T;
+  const users: User[] = [];
+  const contexts: UserLearningContext[] = [];
+
+  for (const user of prismaUsers) {
+    users.push({
+      user_id: user.userId,
+      role: user.role,
+      industry: user.industry,
+      company_size: fromPrismaCompanySize(user.companySize),
+      seniority: user.seniority,
+      stated_goal: user.statedGoal,
+    });
+
+    if (user.learningContext === null) {
+      throw new Error(`User ${user.userId} has no learning context.`);
+    }
+
+    contexts.push({
+      user_id: user.learningContext.userId,
+      role_family: user.learningContext.roleFamily,
+      activity_segment: user.learningContext.activitySegment,
+      primary_topics: fromPrismaCourseTopics(user.learningContext.primaryTopics),
+      secondary_topics: fromPrismaCourseTopics(
+        user.learningContext.secondaryTopics,
+      ),
+      likely_skill_gaps: user.learningContext.likelySkillGaps,
+    });
+  }
+
+  return { users, contexts };
+}
+
+/**
+ * Persists an already-generated, already-validated survey response
+ * dataset to PostgreSQL.
+ */
+export async function saveSurveys(
+  surveyResponses: SurveyResponse[],
+): Promise<void> {
+  try {
+    await prisma.surveyResponse.createMany({
+      data: surveyResponses.map((response) => ({
+        surveyResponseId: response.survey_response_id,
+        userId: response.user_id,
+        skillGaps: response.skill_gaps,
+        goals: response.goals,
+        preferredTopics: toPrismaCourseTopics(response.preferred_topics),
+        confidenceByTopic: response.confidence_by_topic,
+        submittedAt: new Date(response.submitted_at),
+      })),
+    });
   } catch (error: unknown) {
     const message = error instanceof Error ? error.message : String(error);
-
-    throw new Error(`Failed to read JSON file ${path}: ${message}`);
+    throw new Error(`Failed to save survey responses: ${message}`);
   }
 }
 
-async function saveJson(path: string, value: unknown): Promise<void> {
-  await mkdir(dirname(path), {
-    recursive: true,
-  });
+/**
+ * Retrieves users and their learning contexts from PostgreSQL, generates
+ * survey responses, and persists them through Prisma.
+ */
+export async function generateAndSaveSurveys(): Promise<SurveyResponse[]> {
+  const { users, contexts } = await fetchUsersAndContexts();
 
-  await writeFile(path, JSON.stringify(value, null, 2), "utf-8");
+  const surveyResponses = generateSurveyResponses(users, contexts);
+
+  validateSurveyResponses(users, surveyResponses);
+
+  await saveSurveys(surveyResponses);
+
+  return surveyResponses;
 }
 
 async function main(): Promise<void> {
-  const [userDataset, contextDataset] = await Promise.all([
-    readJson<UserDataset>(USERS_INPUT_PATH),
-    readJson<UserContextDataset>(CONTEXT_INPUT_PATH),
-  ]);
+  const { users } = await fetchUsersAndContexts();
 
-  const surveyResponses = generateSurveyResponses(
-    userDataset.users,
-    contextDataset.contexts,
-  );
+  const surveyResponses = await generateAndSaveSurveys();
 
-  validateSurveyResponses(userDataset.users, surveyResponses);
+  const completionRate = surveyResponses.length / users.length;
 
-  const completionRate = surveyResponses.length / userDataset.users.length;
-
-  const dataset: SurveyDataset = {
-    metadata: {
-      total_users: userDataset.users.length,
-
-      total_survey_responses: surveyResponses.length,
-
-      survey_completion_rate: Number(completionRate.toFixed(4)),
-
-      confidence_scale: {
-        minimum: 1,
-        maximum: 5,
-      },
-
-      seed: RANDOM_SEED,
-    },
-
-    survey_responses: surveyResponses,
-  };
-
-  await saveJson(SURVEYS_OUTPUT_PATH, dataset);
-
-  console.log("Survey responses generated successfully.");
-
-  console.log(`Users: ${userDataset.users.length}`);
-
+  console.log("Survey responses generated and inserted successfully.");
+  console.log(`Users: ${users.length}`);
   console.log(`Survey responses: ${surveyResponses.length}`);
-
   console.log(`Survey completion rate: ${(completionRate * 100).toFixed(1)}%`);
-
-  console.log(`Survey file: ${SURVEYS_OUTPUT_PATH}`);
 }
 
-main().catch((error: unknown) => {
-  console.error("Failed to generate survey responses:", error);
-
-  process.exitCode = 1;
-});
+if (isMainModule(import.meta.url)) {
+  main()
+    .catch((error: unknown) => {
+      console.error("Failed to generate survey responses:", error);
+      process.exitCode = 1;
+    })
+    .finally(() => {
+      void prisma.$disconnect();
+    });
+}

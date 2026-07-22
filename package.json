@@ -10,17 +10,22 @@
     "db:generate": "prisma generate",
     "db:migrate": "prisma migrate dev",
     "db:deploy": "prisma migrate deploy",
+    "db:reset": "prisma migrate reset",
     "db:studio": "prisma studio",
     "generate:courses": "tsx src/scripts/generate-courses.ts",
     "generate:users": "tsx src/scripts/generate-users.ts",
     "generate:surveys": "tsx src/scripts/generate-surveys.ts",
     "generate:usage": "tsx src/scripts/generate-usage-events.ts",
-    "generate:data": "npm run generate:courses && npm run generate:users && npm run generate:surveys && npm run generate:usage"
+    "generate:data": "tsx src/scripts/generate-dataset.ts",
+    "test": "vitest run"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "type": "module",
+  "imports": {
+    "#*": "./src/*"
+  },
   "devDependencies": {
     "@types/express": "^5.0.6",
     "@types/node": "^26.1.1",
