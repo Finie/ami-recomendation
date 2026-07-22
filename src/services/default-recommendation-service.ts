@@ -54,7 +54,7 @@ export class DefaultRecommendationService implements RecommendationService {
     userId: number,
     limit = 10,
   ): Promise<CourseRecommendation[]> {
-    this.validateLimit(limit);
+    this.validateInput(userId, limit);
 
     const [user, context, survey, usageEvents, courses] = await Promise.all([
       this.userRepository.findById(userId),
@@ -201,6 +201,17 @@ export class DefaultRecommendationService implements RecommendationService {
     const boundedScore = Math.max(0, Math.min(1, score));
 
     return Number(boundedScore.toFixed(4));
+  }
+
+  private validateInput(userId: number, limit: number): void {
+    this.validateUserId(userId);
+    this.validateLimit(limit);
+  }
+
+  private validateUserId(userId: number): void {
+    if (!Number.isInteger(userId) || userId <= 0) {
+      throw new Error("User id must be a positive integer.");
+    }
   }
 
   private validateLimit(limit: number): void {
